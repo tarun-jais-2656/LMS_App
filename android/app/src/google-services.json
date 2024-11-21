@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "885477659428",
+    "project_id": "lms-app-82f2c",
+    "storage_bucket": "lms-app-82f2c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885477659428:android:f5d41f19381977568219b1",
+        "android_client_info": {
+          "package_name": "com.lms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885477659428-j5mfkace6jmpigrjiimt9k3kdijmsm6h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbZq2qnOxCINjRLeUpItsN7wYz6kOjTHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885477659428-j5mfkace6jmpigrjiimt9k3kdijmsm6h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "885477659428-0k0bci89k09i9iluqc13ij3d460schfu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.LMS"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,29 @@
+{
+    "courses" : [
+        {
+            "name": "Introduction to Python",
+            "img": "https://i.pinimg.com/736x/44/5e/90/445e90afddad9fccffeab32e5a9949f2.jpg",
+            "price": 29.99
+        },
+        {
+            "name": "Web Development Bootcamp",
+            "img": "https://i.pinimg.com/736x/2b/c1/c9/2bc1c9c6efc3c194e67f30bfb0aa5e22.jpg",
+            "price": 49.99
+        },
+        {
+            "name": "Data Science with R",
+            "img": "https://i.pinimg.com/736x/14/cb/c1/14cbc10e848a3e5e794c11b57bf1ba3c.jpg",
+            "price": 39.99
+        },
+        {
+            "name": "Machine Learning Fundamentals",
+            "img": "https://i.pinimg.com/736x/c9/c7/ee/c9c7eec6f741f0d1296f9d53cb090542.jpg",
+            "price": 59.99
+        },
+        {
+            "name": "Graphic Design Mastery",
+            "img": "https://i.pinimg.com/736x/d3/d5/a3/d3d5a3e259ee8ca212d85f07e92c16cd.jpg",
+            "price": 24.99
+        }
+    ]
+}

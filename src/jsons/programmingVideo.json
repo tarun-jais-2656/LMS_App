@@ -1,0 +1,79 @@
+{
+    "videos": [
+        {
+            "id": "1565838",
+            "url": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_30mb.mp4",
+            "price": 99
+        },
+        {
+            "id": "625204",
+            "url": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+            "price": 45
+        },
+        {
+            "id": "851712",
+            "url": "https://example.com/video/12347",
+            "price": 65
+        },
+        {
+            "id": "756150",
+            "url": "https://example.com/video/12348",
+            "price": 70
+        },
+        {
+            "id": "437398",
+            "url": "https://example.com/video/12349",
+            "price": 44
+        },
+        {
+            "id": "705264",
+            "url": "https://example.com/video/12350",
+            "price": 38
+        },
+        {
+            "id": "764164",
+            "url": "https://example.com/video/12351",
+            "price": 43
+        },
+        {
+            "id": "995016",
+            "url": "https://example.com/video/12352",
+            "price": 85
+        },
+        {
+            "id": "1352468",
+            "url": "https://example.com/video/12353",
+            "price": 83
+        },
+        {
+            "id": "947098",
+            "url": "https://example.com/video/12354",
+            "price": 95
+        },
+        {
+            "id": "v12355",
+            "url": "https://example.com/video/12355",
+            "price": 104
+        },
+        {
+            "id": "v12356",
+            "url": "https://example.com/video/12356",
+            "price": 62
+        },
+        {
+            "id": "v12357",
+            "url": "https://example.com/video/12357",
+            "price": 100
+        },
+        {
+            "id": "v12358",
+            "url": "https://example.com/video/12358",
+            "price": 109
+        },
+        {
+            "id": "v12359",
+            "url": "https://example.com/video/12359",
+            "price": 35
+        }
+    ]
+}
