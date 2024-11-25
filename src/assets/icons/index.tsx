@@ -28,5 +28,17 @@ export const icon={
     2:require('../icons/2.webp'),
     3:require('../icons/3.webp'),
     4:require('../icons/4.webp'),
+    visa:require('../icons/visa.png'),
+    accountImg:require('../icons/accountImg.png'),
+    learn:require('../icons/learn.png'),
+    support:require('../icons/support.png'),
+    next:require('../icons/next.png'),
+    logout:require('../icons/logout.png'),
+    back1:require('../icons/back1.png'),
+    calender:require('../icons/calender.png'),
+    drop:require('../icons/drop.png'),
+    gallery:require('../icons/gallery.png'),
+    cam:require('../icons/cam.png'),
+    avatar:require('../icons/avatar.png'),
 
 }

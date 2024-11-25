@@ -3,7 +3,7 @@ import React from "react";
 import { Home } from "../../screens/bottomTabs/home";
 import { Search } from "../../screens/bottomTabs/search";
 import { Profile } from "../../screens/bottomTabs/profile";
-import { Courses } from "../../screens/bottomTabs/courses";
+import { MyCourses } from "../../screens/bottomTabs/myCourses";
 import { Image } from "react-native";
 import { icon } from "../../assets/icons";
 
@@ -21,7 +21,7 @@ export function BottomTab(){
                 if (route.name === 'Search') {
                     iconI = icon.search
                 }
-                if (route.name === 'Courses') {
+                if (route.name === 'MyCourses') {
                     iconI = icon.courses
                 }
                 if (route.name === 'Profile') {
@@ -47,8 +47,8 @@ export function BottomTab(){
                 options={{ headerShown: false }}
             />
             <Tabs.Screen
-                component={Courses}
-                name="Courses"
+                component={MyCourses}
+                name="MyCourses"
                 options={{ headerShown: false }}
             />
             <Tabs.Screen

@@ -48,6 +48,7 @@ const Login = () => {
         auth().signInWithEmailAndPassword(email, pass)
             .then(response => {
                 Alert.alert('Login successfully!')
+                navigation.navigate('BottomTab')
             })
             .catch(error => {
                 console.log(error)

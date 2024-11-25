@@ -41,10 +41,12 @@ export function Home() {
         <SafeAreaView style={styles.cont}>
             <View style={styles.head}>
                 <View style={styles.flexRow}>
+                    <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
                     <Image
                         source={icon.userr}
                         style={styles.userr}
                     />
+                    </TouchableOpacity>
                     <View>
                         <Text style={styles.txt1}>Hello,</Text>
                         <Text style={styles.txt2}>Tarun</Text>

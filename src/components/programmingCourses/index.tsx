@@ -14,7 +14,7 @@ const ProgrammingCourses = () => {
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
 
-    // Function to enrich the course data with video URL and price
+    // api response updation course data with video URL and price
     const enrichCoursesWithVideos = (coursesData) => {
         // console.log(coursesData)
         return coursesData.map(course => {
@@ -104,7 +104,8 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginRight: 16,
         width: width * 0.8,
-        aspectRatio: 1,
+        // aspectRatio: 1,
+        height:350,
         padding: 10,
         elevation: 5, // Shadow for Android
         shadowColor: '#000', // Shadow for iOS

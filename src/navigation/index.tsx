@@ -11,6 +11,7 @@ import { BottomTab } from "./bottomTab";
 import CourseDetail from "../screens/courseDetail";
 import Player from "../screens/videoPlayer";
 import MyCart from "../screens/MyCart/myCart";
+import EditProfile from "../screens/editProfile";
 
 type RootStackParamList = {
     Splash: undefined;
@@ -24,6 +25,7 @@ type RootStackParamList = {
     CourseDetail:undefined
     Player:undefined
     MyCart:undefined
+    EditProfile:undefined
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -31,7 +33,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const StackNavigation: React.FC = () => {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="BottomTab">
+        <Stack.Navigator initialRouteName="Splash">
           <Stack.Screen
             name="Splash"
             component={Splash}
@@ -85,6 +87,11 @@ const StackNavigation: React.FC = () => {
           <Stack.Screen
             name="MyCart"
             component={MyCart}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

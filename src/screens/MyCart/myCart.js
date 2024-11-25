@@ -1,19 +1,37 @@
-import React from "react";
-import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { Modalpay } from "../../components/modal";
+import { addToPaidCourses } from "/Users/ai/Desktop/Projects/LMS/src/redux/paidCourses/paidCoursesSlice.js"; // Import addToPaidCourses action
+import { removeFromCart } from "/Users/ai/Desktop/Projects/LMS/src/redux/myCart/myCartSlice.js" // Import removeFromCart action
 
 
 const { width } = Dimensions.get('window');
 export default function MyCart() {
+    const [isModalVisible, setModalVisible] = useState(false);
     const myCartCourses = useSelector(state => state.cart);
-    console.log(myCartCourses);
-    let total=0;
-    for(let i=0;i<myCartCourses.length;i++){
-        total+=myCartCourses[i].price;
+    const dispatch = useDispatch();
+    // console.log(myCartCourses);
+    let total = 0;
+    for (let i = 0; i < myCartCourses.length; i++) {
+        total += myCartCourses[i].price;
     }
-    console.log(total)
+    // console.log(total)
+
+    const onBackdropPress = () => {
+        setModalVisible(!isModalVisible);
+    }
+
+    const handlePayment = () => {
+        // Move all courses from cart to paidCourses and remove them from the cart
+        myCartCourses.forEach(course => {
+            dispatch(addToPaidCourses(course));  // Add to paid courses list
+            dispatch(removeFromCart(course.id));  // Remove from cart
+        });
+        setModalVisible(false);
+        Alert.alert("Payment done successfully.")
+    }
 
 
     const renderCourse = ({ item }) => (
@@ -43,10 +61,16 @@ export default function MyCart() {
 
             <View style={styles.txtView}>
                 <Text style={styles.txt2}>Total Price: ${total}</Text>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity style={styles.btn} onPress={() => setModalVisible(!isModalVisible)}>
                     <Text style={styles.txtBtn}>Go For Payment</Text>
                 </TouchableOpacity>
             </View>
+            <Modalpay
+                isModalVisible={isModalVisible}
+                onBackdropPress={onBackdropPress}
+                total={total}
+                handlePayment={handlePayment} // Pass handlePayment function
+            />
         </SafeAreaView>
     )
 }
@@ -69,23 +93,23 @@ const styles = StyleSheet.create({
     },
     imgRemove: {
         flexDirection: 'row',
-        justifyContent:'space-between'
+        justifyContent: 'space-between'
     },
-    removeBtn:{
-        backgroundColor:"red",
-        justifyContent:'center',
-        marginVertical:30,
-        paddingHorizontal:10,
-        borderRadius:10,
+    removeBtn: {
+        backgroundColor: "red",
+        justifyContent: 'center',
+        marginVertical: 30,
+        paddingHorizontal: 10,
+        borderRadius: 10,
     },
-    txt:{
-        fontSize:14,
-        fontWeight:'700',
-        color:'#FFFFFF'
+    txt: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#FFFFFF'
     },
     image: {
         height: 100,
-        width:width/2,
+        width: width / 2,
         borderRadius: 8,
         // resizeMode: 'contain'
     },
@@ -104,27 +128,27 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     colorTxt1: {
-        fontWeight:'700'
+        fontWeight: '700'
     },
-    txtView:{
-        paddingVertical:20,
-        alignItems:'center'
+    txtView: {
+        paddingVertical: 20,
+        alignItems: 'center'
     },
-    txt2:{
-        fontSize:20,
-        fontWeight:'700'
+    txt2: {
+        fontSize: 20,
+        fontWeight: '700'
     },
-    txtBtn:{
-        fontSize:18,
-        fontWeight:'700',
-        color:"#FFFFFF"
+    txtBtn: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: "#FFFFFF"
     },
-    btn:{
-        backgroundColor:'#51a6f5',
-        paddingVertical:10,
-        width:width*0.93,
-        alignItems:'center',
-        marginTop:5,
-        borderRadius:10
+    btn: {
+        backgroundColor: '#51a6f5',
+        paddingVertical: 10,
+        width: width * 0.93,
+        alignItems: 'center',
+        marginTop: 5,
+        borderRadius: 10
     }
 })
