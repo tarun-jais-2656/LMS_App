@@ -1,58 +1,71 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, SafeAreaView, Dimensions, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { useNavigation, useRoute } from '@react-navigation/native';
-import Video from 'react-native-video'
-import { useDispatch, useSelector } from "react-redux";
+import Video from 'react-native-video';
+import { useDispatch } from "react-redux";
 import { addCourseToCart } from "../../redux/myCart/myCartSlice";
 import { Modalpay } from "../../components/modal";
-import { addToPaidCourses } from "/Users/ai/Desktop/Projects/LMS/src/redux/paidCourses/paidCoursesSlice.js"; // Import addToPaidCourses action
+import { addToPaidCourses } from "/Users/ai/Desktop/Projects/LMS/src/redux/paidCourses/paidCoursesSlice.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import firestore from '@react-native-firebase/firestore';
 
-
-const { width, height } = Dimensions.get("window"); 
+const { width, height } = Dimensions.get("window");
 
 export default function CourseDetail() {
-    const navigation=useNavigation();
+    const navigation = useNavigation();
     const dispatch = useDispatch();
     const [addedToCart, setAddedToCart] = useState(false);
-    const[isModalVisible,setModalVisible]=useState(false);
-
-    const handlePress = () => {
-        if (!addedToCart) {
-            dispatch(addCourseToCart(course));
-        }
-        if (addedToCart) {
-            navigation.navigate('MyCart'); 
-          }
-        setAddedToCart(!addedToCart); // Toggle the state
-    };
-    // const myCartCourses=useSelector(state=>state.cart);
-    // console.log(myCartCourses);
+    const [isModalVisible, setModalVisible] = useState(false);
 
     const route = useRoute();
     const { course } = route.params;
-    console.log(course)
+    // console.log(course);
 
-    const onBackdropPress=()=>{
+    const handlePress = async () => {
+        try {
+            const userUID = await AsyncStorage.getItem('userUID');  // Get the user UID from AsyncStorage
+            if (!userUID) {
+                Alert.alert('You must be logged in to add courses to your cart.');
+                return;
+            }
+
+            if (!addedToCart) {
+                dispatch(addCourseToCart(course));
+                await firestore()
+                    .collection('users')  
+                    .doc(userUID)  
+                    .collection('cart')  
+                    .doc(course.id.toString())  
+                    .set({
+                        courseId: course.id,
+                        title: course.title,
+                        price: course.price,
+                        // image: course.image_480x270,
+                    });
+            } else {
+                navigation.navigate('MyCart');  
+            }
+
+            setAddedToCart(!addedToCart); 
+        } catch (error) {
+            console.error('Error adding course to cart:', error);
+            Alert.alert('Error adding course to cart.');
+        }
+    };
+
+    const onBackdropPress = () => {
         setModalVisible(!isModalVisible);
-    }
+    };
 
     const handlePayment = () => {
-        // Move all courses from cart to paidCourses and remove them from the cart
-        
-        dispatch(addToPaidCourses(course));  // Add to paid courses list
+        dispatch(addToPaidCourses(course));
         setModalVisible(false);
-        Alert.alert("Payment done successfully.")
-    }
+        Alert.alert("Payment done successfully.");
+    };
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false} >
-                {/* <Video
-                source={{ uri: course.videoUrl}}
-                style={styles.video}
-                resizeMode="contain"
-            /> */}
-
+            <ScrollView showsVerticalScrollIndicator={false}>
                 {course ? (
                     <>
                         <Image source={{ uri: course.image_480x270 }} style={styles.image} />
@@ -62,7 +75,7 @@ export default function CourseDetail() {
                         <Text style={styles.rating}>Rating: <Text style={styles.colorTxt}>{course.avg_rating}</Text></Text>
                         <Text style={styles.hours}>Duration: <Text style={styles.colorTxt}>{course.content_info_short}</Text></Text>
                         <Text style={styles.hours}>Price:  <Text style={styles.colorTxt1}>${course.price}</Text></Text>
-                        <TouchableOpacity style={{ borderWidth: 1, padding: 10, backgroundColor: '#6e30ba', alignItems: 'center', borderRadius: 10, marginBottom: 10 }} onPress={()=>setModalVisible(!isModalVisible)}>
+                        <TouchableOpacity style={{ borderWidth: 1, padding: 10, backgroundColor: '#6e30ba', alignItems: 'center', borderRadius: 10, marginBottom: 10 }} onPress={() => setModalVisible(!isModalVisible)}>
                             <Text style={{ fontSize: 18, fontWeight: '700', color: '#FFFFFF', }}>Buy now</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -82,11 +95,12 @@ export default function CourseDetail() {
                     </>
                 ) : (
                     <Text>No course data available</Text>
-                )}<Modalpay
-                isModalVisible={isModalVisible}
-                onBackdropPress={onBackdropPress}
-                total={course.price}
-                handlePayment={handlePayment}
+                )}
+                <Modalpay
+                    isModalVisible={isModalVisible}
+                    onBackdropPress={onBackdropPress}
+                    total={course.price}
+                    handlePayment={handlePayment}
                 />
             </ScrollView>
         </SafeAreaView>
@@ -118,7 +132,7 @@ const styles = StyleSheet.create({
         color: 'grey'
     },
     colorTxt1: {
-        fontWeight:'700'
+        fontWeight: '700'
     },
     rating: {
         fontSize: 16,
@@ -134,7 +148,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     video: {
-        // width: width, // Use full screen width
-        height: 220, // You can adjust this depending on the aspect ratio or desired height
+        height: 220,
     },
 });

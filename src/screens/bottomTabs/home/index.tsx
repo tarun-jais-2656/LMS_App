@@ -36,6 +36,7 @@ export function Home() {
             </View>
         </View>
     );
+    
 
     return (
         <SafeAreaView style={styles.cont}>

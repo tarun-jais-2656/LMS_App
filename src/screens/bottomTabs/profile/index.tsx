@@ -4,20 +4,25 @@ import styles from "./styles";
 import { icon } from "../../../assets/icons";
 import { useNavigation } from "@react-navigation/native";
 import auth from '@react-native-firebase/auth';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Profile = () => {
     const navigation = useNavigation()
 
-    const onLogout = () => {
-        auth()
-            .signOut()
-            .then(response=>{
-                Alert.alert("Logout successfully")
-            })
-            .catch(error=>{
-                Alert.alert("Unable to Logout")
-            })
-    }
+    const onLogout = async () => {
+        try {
+            // Sign out from Firebase
+            await auth().signOut();
+
+            // Remove user UID from AsyncStorage
+            await AsyncStorage.removeItem('userUID');
+            
+            Alert.alert("Logout successfully");
+            navigation.navigate('Login'); // Or any other route you want
+        } catch (error) {
+            Alert.alert("Unable to Logout");
+        }
+    };
     return (
         <SafeAreaView style={styles.safe}>
             <View style={styles.profileView}>

@@ -4,6 +4,7 @@ import { icon } from "../../assets/icons";
 import { useNavigation } from "@react-navigation/native";
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
 
@@ -44,23 +45,21 @@ const Login = () => {
         navigation.navigate('Forgot');
     }
 
-    const onLogin = () => {
-        auth().signInWithEmailAndPassword(email, pass)
-            .then(response => {
-                Alert.alert('Login successfully!')
-                navigation.navigate('BottomTab')
-            })
-            .catch(error => {
-                console.log(error)
-                if (error.code === 'auth/wrong-password') {
-                    Alert.alert('Password is incorrect!')
-                }
-                else if (error.code === 'auth/invalid-credential') {
-                    Alert.alert('Invalid credentials!')
-                }
-            })
-    }
-
+    const onLogin = async () => {
+        try {
+            const userCredential = await auth().signInWithEmailAndPassword(email, pass);
+            const userUid = userCredential.user.uid;
+            await AsyncStorage.setItem('userUID', userUid);
+            Alert.alert('Login successfully!');
+            navigation.navigate('BottomTab');
+        } catch (error) {
+            if (error.code === 'auth/wrong-password') {
+                Alert.alert('Password is incorrect!');
+            } else if (error.code === 'auth/invalid-credential') {
+                Alert.alert('Invalid credentials!');
+            }
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
