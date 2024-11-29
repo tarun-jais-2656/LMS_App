@@ -5,7 +5,8 @@ import { responsiveWidth } from "react-native-responsive-dimensions";
 import Swiper from "react-native-swiper";
 import ProgrammingCourses from "../../../components/programmingCourses";
 import courses from "/Users/ai/Desktop/Projects/LMS/src/jsons/dummy5Courses.json"
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const bannerData = [
@@ -36,6 +37,10 @@ export function Home() {
             </View>
         </View>
     );
+
+    
+
+    const name=AsyncStorage.getItem('name')
     
 
     return (
@@ -50,7 +55,7 @@ export function Home() {
                     </TouchableOpacity>
                     <View>
                         <Text style={styles.txt1}>Hello,</Text>
-                        <Text style={styles.txt2}>Tarun</Text>
+                        <Text style={styles.txt2}>{name}</Text>
                     </View>
                 </View>
                 <TouchableOpacity onPress={()=>navigation.navigate('MyCart')}>

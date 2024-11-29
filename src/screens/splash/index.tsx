@@ -9,8 +9,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Splash = () => {
     const navigation = useNavigation()
     const [user, setUser] = useState();
-    // console.log(user)
+    console.log(user)
     const onAuthStateSave = (user: any) => setUser(user)
+    
 
     const getUserUid = async () => {
         try {

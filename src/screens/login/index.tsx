@@ -50,6 +50,8 @@ const Login = () => {
             const userCredential = await auth().signInWithEmailAndPassword(email, pass);
             const userUid = userCredential.user.uid;
             await AsyncStorage.setItem('userUID', userUid);
+            const name = email.replace('@gmail.com', '') 
+            await AsyncStorage.setItem('name', name);
             Alert.alert('Login successfully!');
             navigation.navigate('BottomTab');
         } catch (error) {

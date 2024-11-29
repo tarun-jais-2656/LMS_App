@@ -8,17 +8,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Profile = () => {
     const navigation = useNavigation()
+    const name=AsyncStorage.getItem('name')
 
     const onLogout = async () => {
         try {
-            // Sign out from Firebase
             await auth().signOut();
-
-            // Remove user UID from AsyncStorage
             await AsyncStorage.removeItem('userUID');
+            await AsyncStorage.removeItem('name');
             
             Alert.alert("Logout successfully");
-            navigation.navigate('Login'); // Or any other route you want
+            navigation.navigate('GetStarted');
         } catch (error) {
             Alert.alert("Unable to Logout");
         }
@@ -30,7 +29,7 @@ export const Profile = () => {
                     style={styles.profileImg}
                 />
                 <View style={styles.txtView}>
-                    <Text style={styles.txt1}>Tarun Jaiswal</Text>
+                    <Text style={styles.txt1}>{name}</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.txt2}>Account Settings</Text>

@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Image, SafeAreaView, Dimensions, TouchableOpaci
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Video from 'react-native-video';
 import { useDispatch } from "react-redux";
-import { addCourseToCart } from "../../redux/myCart/myCartSlice";
 import { Modalpay } from "../../components/modal";
 import { addToPaidCourses } from "/Users/ai/Desktop/Projects/LMS/src/redux/paidCourses/paidCoursesSlice.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,17 +19,17 @@ export default function CourseDetail() {
     const route = useRoute();
     const { course } = route.params;
     // console.log(course);
+    
 
     const handlePress = async () => {
         try {
-            const userUID = await AsyncStorage.getItem('userUID');  // Get the user UID from AsyncStorage
+            const userUID = await AsyncStorage.getItem('userUID');  
             if (!userUID) {
                 Alert.alert('You must be logged in to add courses to your cart.');
                 return;
             }
 
             if (!addedToCart) {
-                dispatch(addCourseToCart(course));
                 await firestore()
                     .collection('users')  
                     .doc(userUID)  
@@ -40,7 +39,9 @@ export default function CourseDetail() {
                         courseId: course.id,
                         title: course.title,
                         price: course.price,
-                        // image: course.image_480x270,
+                        image: course.image_480x270,
+                        instructor:course.visible_instructors[0].title,
+                        videoUrl:course.videoUrl,
                     });
             } else {
                 navigation.navigate('MyCart');  
@@ -66,6 +67,11 @@ export default function CourseDetail() {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
+                {/* <Video
+                source={{ uri: course.videoUrl}}
+                style={styles.video}
+                resizeMode="contain"
+            /> */}
                 {course ? (
                     <>
                         <Image source={{ uri: course.image_480x270 }} style={styles.image} />

@@ -1,61 +1,119 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { Modalpay } from "../../components/modal";
-import { addToPaidCourses } from "/Users/ai/Desktop/Projects/LMS/src/redux/paidCourses/paidCoursesSlice.js"; // Import addToPaidCourses action
-import { removeFromCart } from "/Users/ai/Desktop/Projects/LMS/src/redux/myCart/myCartSlice.js" // Import removeFromCart action
-
+import { addToPaidCourses } from "/Users/ai/Desktop/Projects/LMS/src/redux/paidCourses/paidCoursesSlice.js";
+import { removeFromCart } from "/Users/ai/Desktop/Projects/LMS/src/redux/myCart/myCartSlice.js";
+import { addCourseToCart } from "../../redux/myCart/myCartSlice";
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width } = Dimensions.get('window');
+
 export default function MyCart() {
     const [isModalVisible, setModalVisible] = useState(false);
-    const myCartCourses = useSelector(state => state.cart);
     const dispatch = useDispatch();
-    // console.log(myCartCourses);
+    const myCartCourses = useSelector(state => state.cart);
+    // console.log(myCartCourses)
     let total = 0;
-    for (let i = 0; i < myCartCourses.length; i++) {
-        total += myCartCourses[i].price;
-    }
-    // console.log(total)
+    myCartCourses.forEach(course => {
+        total += course.price;
+    });
+
+    const fetchCartData = async () => {
+        try {
+            const userUID = await AsyncStorage.getItem('userUID');
+            
+            const cartSnapshot = await firestore()
+                .collection('users')
+                .doc(userUID)
+                .collection('cart')
+                .get();
+
+            const cartItems = cartSnapshot.docs.map(doc => doc.data());
+
+            cartItems.forEach(item => {
+                const alreadyInCart = myCartCourses.some(course => course.courseId === item.courseId);
+                if (!alreadyInCart) {
+                    dispatch(addCourseToCart(item));
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching cart data:', error);
+            Alert.alert('Error loading cart data');
+        }
+    };
+
+
+    useEffect(() => {
+        fetchCartData();
+    });
+
+    const handleRemoveCourse = async (courseId) => {
+        const Id = String(courseId);
+        try {
+            const userUID = await AsyncStorage.getItem('userUID');
+            
+            // Delete the course from Firestore
+            await firestore()
+                .collection('users')
+                .doc(userUID)
+                .collection('cart')
+                .doc(Id)
+                .delete();
+            
+            // Remove the course from the local Redux state
+            dispatch(removeFromCart(courseId)); // Use courseId for removal
+            
+            // Optionally, show a success alert
+            Alert.alert('Success', 'Course removed from your cart.');
+            
+        } catch (error) {
+            console.error('Error removing course:', error);
+            Alert.alert('Error', 'There was an issue removing the course from your cart.');
+        }
+    };
+    
 
     const onBackdropPress = () => {
         setModalVisible(!isModalVisible);
-    }
+    };
 
     const handlePayment = () => {
-        // Move all courses from cart to paidCourses and remove them from the cart
         myCartCourses.forEach(course => {
-            dispatch(addToPaidCourses(course));  // Add to paid courses list
-            dispatch(removeFromCart(course.id));  // Remove from cart
+            dispatch(addToPaidCourses(course)); 
+            dispatch(removeFromCart(course.id)); 
         });
         setModalVisible(false);
-        Alert.alert("Payment done successfully.")
-    }
+        Alert.alert("Payment done successfully.");
+    };
 
-
-    const renderCourse = ({ item }) => (
+    const renderCourse = ({ item }) => {
+        return(
         <TouchableOpacity>
             <View style={styles.card}>
                 <View style={styles.imgRemove}>
-                    <Image source={{ uri: item.image_480x270 }} style={styles.image} />
-                    <TouchableOpacity style={styles.removeBtn}>
+                    <Image source={{ uri: item.image }} style={styles.image} />
+                    <TouchableOpacity style={styles.removeBtn} onPress={() => handleRemoveCourse(item.courseId)}>
                         <Text style={styles.txt}>Remove</Text>
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.name}>{item.visible_instructors[0].title}</Text>
-                <Text style={styles.hours}>Price:  <Text style={styles.colorTxt1}>${item.price}</Text></Text>
+                <Text style={styles.name}>{item.instructor}</Text>
+                <Text style={styles.hours}>
+                    Price:  <Text style={styles.colorTxt1}>${item.price}</Text>
+                </Text>
             </View>
         </TouchableOpacity>
-    );
+    )};
 
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
                 data={myCartCourses}
                 renderItem={renderCourse}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.courseId.toString()}
                 showsVerticalScrollIndicator={false}
             />
 
@@ -65,14 +123,15 @@ export default function MyCart() {
                     <Text style={styles.txtBtn}>Go For Payment</Text>
                 </TouchableOpacity>
             </View>
+
             <Modalpay
                 isModalVisible={isModalVisible}
                 onBackdropPress={onBackdropPress}
                 total={total}
-                handlePayment={handlePayment} // Pass handlePayment function
+                handlePayment={handlePayment}
             />
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -85,8 +144,8 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         marginBottom: 10,
-        elevation: 5, // Shadow for Android
-        shadowColor: '#000', // Shadow for iOS
+        elevation: 5,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -111,7 +170,6 @@ const styles = StyleSheet.create({
         height: 100,
         width: width / 2,
         borderRadius: 8,
-        // resizeMode: 'contain'
     },
     title: {
         fontSize: 16,
@@ -151,4 +209,4 @@ const styles = StyleSheet.create({
         marginTop: 5,
         borderRadius: 10
     }
-})
+});
