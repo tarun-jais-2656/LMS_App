@@ -23,11 +23,7 @@ export default function CourseDetail() {
 
     const handlePress = async () => {
         try {
-            const userUID = await AsyncStorage.getItem('userUID');  
-            if (!userUID) {
-                Alert.alert('You must be logged in to add courses to your cart.');
-                return;
-            }
+            const userUID = await AsyncStorage.getItem('userUID');
 
             if (!addedToCart) {
                 await firestore()

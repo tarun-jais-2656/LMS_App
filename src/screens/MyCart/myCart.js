@@ -15,7 +15,6 @@ export default function MyCart() {
     const [isModalVisible, setModalVisible] = useState(false);
     const dispatch = useDispatch();
     const myCartCourses = useSelector(state => state.cart);
-    // console.log(myCartCourses)
     let total = 0;
     myCartCourses.forEach(course => {
         total += course.price;
@@ -48,25 +47,21 @@ export default function MyCart() {
 
     useEffect(() => {
         fetchCartData();
-    });
+    },[]);
 
     const handleRemoveCourse = async (courseId) => {
         const Id = String(courseId);
         try {
             const userUID = await AsyncStorage.getItem('userUID');
             
-            // Delete the course from Firestore
             await firestore()
                 .collection('users')
                 .doc(userUID)
                 .collection('cart')
                 .doc(Id)
                 .delete();
-            
-            // Remove the course from the local Redux state
-            dispatch(removeFromCart(courseId)); // Use courseId for removal
-            
-            // Optionally, show a success alert
+
+            dispatch(removeFromCart(courseId));
             Alert.alert('Success', 'Course removed from your cart.');
             
         } catch (error) {

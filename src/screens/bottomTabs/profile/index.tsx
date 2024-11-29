@@ -15,8 +15,6 @@ export const Profile = () => {
             await auth().signOut();
             await AsyncStorage.removeItem('userUID');
             await AsyncStorage.removeItem('name');
-            
-            Alert.alert("Logout successfully");
             navigation.navigate('GetStarted');
         } catch (error) {
             Alert.alert("Unable to Logout");
