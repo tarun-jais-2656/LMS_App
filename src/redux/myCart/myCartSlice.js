@@ -8,7 +8,7 @@ const MyCartSlice = createSlice({
             state.push(action.payload);
         },
         removeFromCart: (state, action) => {
-            return state.filter(course => course.courseId !== action.payload);
+            return state.filter(course => course.id !== action.payload);
         },
         clearCart: (state) => {
             return [];  

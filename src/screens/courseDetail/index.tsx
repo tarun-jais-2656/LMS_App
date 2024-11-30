@@ -32,11 +32,11 @@ export default function CourseDetail() {
                     .collection('cart')  
                     .doc(course.id.toString())  
                     .set({
-                        courseId: course.id,
+                        id: course.id,
                         title: course.title,
                         price: course.price,
-                        image: course.image_480x270,
-                        instructor:course.visible_instructors[0].title,
+                        image_480x270: course.image_480x270,
+                        visible_instructors:course.visible_instructors[0].title,
                         videoUrl:course.videoUrl,
                     });
             } else {
@@ -54,10 +54,33 @@ export default function CourseDetail() {
         setModalVisible(!isModalVisible);
     };
 
-    const handlePayment = () => {
-        dispatch(addToPaidCourses(course));
-        setModalVisible(false);
-        Alert.alert("Payment done successfully.");
+    const handlePayment = async () => {
+        try {
+            const userUID = await AsyncStorage.getItem('userUID');
+
+            if (userUID) {
+                    await firestore()
+                        .collection('users')
+                        .doc(userUID)
+                        .collection('paidCourses')
+                        .doc(course.id.toString())  
+                        .set({
+                            id: course.id,
+                            title: course.title,
+                            price: course.price,
+                            image_480x270: course.image_480x270,
+                            visible_instructors: course.visible_instructors[0].title,
+                            videoUrl: course.videoUrl,
+                        });
+                setModalVisible(false);
+                Alert.alert("Payment done successfully.");
+            } else {
+                Alert.alert('User ID not found.');
+            }
+        } catch (error) {
+            console.error('Error adding paidCourse:', error);
+            Alert.alert('Error adding paidCourse.');
+        }
     };
 
     return (

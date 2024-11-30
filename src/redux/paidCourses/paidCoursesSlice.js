@@ -3,13 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const PaidCoursesSlice = createSlice({
   name: 'paidCourses',
-  initialState: [], // Initially empty list of paid courses
+  initialState: [],
   reducers: {
     addToPaidCourses: (state, action) => {
-      state.push(action.payload);  // Add a course to the paidCourses list
+      state.push(action.payload);
+      console.log("00000000000=========>",action.payload);
     },
     clearPaidCourses: (state) => {
-      return [];  // Clear all paid courses
+      return []; 
     },
   },
 });

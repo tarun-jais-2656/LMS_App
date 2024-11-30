@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { Modalpay } from "../../components/modal";
 import { addToPaidCourses } from "/Users/ai/Desktop/Projects/LMS/src/redux/paidCourses/paidCoursesSlice.js";
-import { removeFromCart } from "/Users/ai/Desktop/Projects/LMS/src/redux/myCart/myCartSlice.js";
+import { clearCart, removeFromCart } from "/Users/ai/Desktop/Projects/LMS/src/redux/myCart/myCartSlice.js";
 import { addCourseToCart } from "../../redux/myCart/myCartSlice";
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,7 +23,7 @@ export default function MyCart() {
     const fetchCartData = async () => {
         try {
             const userUID = await AsyncStorage.getItem('userUID');
-            
+
             const cartSnapshot = await firestore()
                 .collection('users')
                 .doc(userUID)
@@ -33,7 +33,7 @@ export default function MyCart() {
             const cartItems = cartSnapshot.docs.map(doc => doc.data());
 
             cartItems.forEach(item => {
-                const alreadyInCart = myCartCourses.some(course => course.courseId === item.courseId);
+                const alreadyInCart = myCartCourses.some(course => course.id === item.id);
                 if (!alreadyInCart) {
                     dispatch(addCourseToCart(item));
                 }
@@ -45,15 +45,49 @@ export default function MyCart() {
     };
 
 
-    useEffect(() => {
-        fetchCartData();
-    },[]);
-
-    const handleRemoveCourse = async (courseId) => {
-        const Id = String(courseId);
+    const handlePayment = async () => {
         try {
             const userUID = await AsyncStorage.getItem('userUID');
-            
+
+            if (userUID) {
+                for (const item of myCartCourses) {
+                    await firestore()
+                        .collection('users')
+                        .doc(userUID)
+                        .collection('paidCourses')
+                        .doc(item.id.toString())  
+                        .set({
+                            id: item.id,
+                            title: item.title,
+                            price: item.price,
+                            image_480x270: item.image_480x270,
+                            visible_instructors: item.visible_instructors,
+                            videoUrl: item.videoUrl,
+                        });
+                }
+                // Alert.alert('PaidCourse(s) added successfully!');
+                dispatch(clearCart());
+                setModalVisible(false);
+                Alert.alert("Payment done successfully.");
+            } else {
+                Alert.alert('User ID not found.');
+            }
+        } catch (error) {
+            console.error('Error adding paidCourse:', error);
+            Alert.alert('Error adding paidCourse.');
+        }
+    };
+
+
+    useEffect(() => {
+        fetchCartData();
+    }, []);
+
+    const handleRemoveCourse = async (id) => {
+        const Id = String(id);
+        try {
+            const userUID = await AsyncStorage.getItem('userUID');
+
             await firestore()
                 .collection('users')
                 .doc(userUID)
@@ -61,54 +95,47 @@ export default function MyCart() {
                 .doc(Id)
                 .delete();
 
-            dispatch(removeFromCart(courseId));
+            dispatch(removeFromCart(id));
             Alert.alert('Success', 'Course removed from your cart.');
-            
+
         } catch (error) {
             console.error('Error removing course:', error);
             Alert.alert('Error', 'There was an issue removing the course from your cart.');
         }
     };
-    
+
 
     const onBackdropPress = () => {
         setModalVisible(!isModalVisible);
     };
 
-    const handlePayment = () => {
-        myCartCourses.forEach(course => {
-            dispatch(addToPaidCourses(course)); 
-            dispatch(removeFromCart(course.id)); 
-        });
-        setModalVisible(false);
-        Alert.alert("Payment done successfully.");
-    };
 
     const renderCourse = ({ item }) => {
-        return(
-        <TouchableOpacity>
-            <View style={styles.card}>
-                <View style={styles.imgRemove}>
-                    <Image source={{ uri: item.image }} style={styles.image} />
-                    <TouchableOpacity style={styles.removeBtn} onPress={() => handleRemoveCourse(item.courseId)}>
-                        <Text style={styles.txt}>Remove</Text>
-                    </TouchableOpacity>
+        return (
+            <TouchableOpacity>
+                <View style={styles.card}>
+                    <View style={styles.imgRemove}>
+                        <Image source={{ uri: item.image_480x270 }} style={styles.image} />
+                        <TouchableOpacity style={styles.removeBtn} onPress={() => handleRemoveCourse(item.id)}>
+                            <Text style={styles.txt}>Remove</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={styles.title}>{item.title}</Text>
+                    <Text style={styles.name}>{item.visible_instructors}</Text>
+                    <Text style={styles.hours}>
+                        Price:  <Text style={styles.colorTxt1}>${item.price}</Text>
+                    </Text>
                 </View>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.name}>{item.instructor}</Text>
-                <Text style={styles.hours}>
-                    Price:  <Text style={styles.colorTxt1}>${item.price}</Text>
-                </Text>
-            </View>
-        </TouchableOpacity>
-    )};
+            </TouchableOpacity>
+        )
+    };
 
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
                 data={myCartCourses}
                 renderItem={renderCourse}
-                keyExtractor={(item) => item.courseId.toString()}
+                keyExtractor={(item) => item.id.toString()}
                 showsVerticalScrollIndicator={false}
             />
 

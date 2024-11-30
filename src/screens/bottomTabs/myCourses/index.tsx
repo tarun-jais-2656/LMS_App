@@ -1,14 +1,51 @@
-import React from "react";
-import { FlatList, Text, View, StyleSheet, SafeAreaView } from "react-native";
-import { useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect } from "react";
+import { FlatList, Text, View, StyleSheet, SafeAreaView, Alert } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import firestore from '@react-native-firebase/firestore';
+import { addToPaidCourses } from "../../../redux/paidCourses/paidCoursesSlice";
+
 
 export function MyCourses() {
+  const dispatch = useDispatch();
   const paidCourses = useSelector(state => state.paidCourses); // Get paid courses from Redux
+  console.log("===purchased========>", paidCourses)
+
+  const fetchPaidCourses = async () => {
+    try {
+      const userUID = await AsyncStorage.getItem('userUID');
+
+      const paidSnapshot = await firestore()
+        .collection('users')
+        .doc(userUID)
+        .collection('paidCourses')
+        .get();
+
+      const paidItems = paidSnapshot.docs.map(doc => doc.data());
+
+      paidItems.forEach(item => {
+        const alreadyInPaidCourse = paidCourses.some(course => course.id === item.id);
+        if (!alreadyInPaidCourse) {
+          dispatch(addToPaidCourses(item));
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching paidCourse data:', error);
+      Alert.alert('Error loading paidCourse data');
+    }
+  };
+
+
+  useEffect(() => {
+    fetchPaidCourses();
+  }, []);
+
+
 
   const renderCourse = ({ item }) => (
     <View style={styles.card}>
       <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.name}>{item.visible_instructors[0].title}</Text>
+      {/* <Text style={styles.name}>{item.visible_instructors}</Text> */}
       <Text style={styles.hours}>Price:  <Text style={styles.colorTxt1}>${item.price}</Text></Text>
     </View>
   );
