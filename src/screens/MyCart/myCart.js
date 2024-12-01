@@ -65,10 +65,23 @@ export default function MyCart() {
                             videoUrl: item.videoUrl,
                         });
                 }
-                // Alert.alert('PaidCourse(s) added successfully!');
+               
                 dispatch(clearCart());
                 setModalVisible(false);
+
+                await firestore()
+                .collection('users')
+                .doc(userUID)
+                .collection('cart')
+                .get()
+                .then(querySnapshot => {
+                    if (!querySnapshot.empty) {
+                        querySnapshot.forEach(doc => doc.ref.delete());
+                    }
+                });
+
                 Alert.alert("Payment done successfully.");
+                
             } else {
                 Alert.alert('User ID not found.');
             }

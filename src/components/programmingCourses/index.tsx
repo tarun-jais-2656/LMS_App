@@ -36,10 +36,11 @@ const ProgrammingCourses = () => {
         const fetchCourses = async () => {
             try {
                 const response = await axios.get(
-                    'https://www.udemy.com/api-2.0/discovery-units/all_courses/?page_size=10&subcategory=&instructional_level=&lang=&price=&duration=&closed_captions=&subs_filter_type=&subcategory_id=8&source_page=subcategory_page&locale=en_US&navigation_locale=en&skip_price=true&sos=ps&fl=scat'
+                    'https://www.udemy.com/api-2.0/discovery-units/all_courses/?page_size=15&subcategory=&instructional_level=&lang=&price=&duration=&closed_captions=&subs_filter_type=&subcategory_id=8&source_page=subcategory_page&locale=en_US&navigation_locale=en&skip_price=true&sos=ps&fl=scat'
                 );
 
                 // Enrich the API response with video data
+                // console.log(response);
                 const enrichedCourses = enrichCoursesWithVideos(response.data.unit.items);
                 setCourses(enrichedCourses);
                 setLoading(false);
