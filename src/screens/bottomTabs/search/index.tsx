@@ -13,7 +13,7 @@ export function Search() {
         navigation.navigate('CourseDetail', { course }); 
     };
 
-    // Filter courses when query changes
+   
     useEffect(() => {
         setFilteredCourses(
             allCourses.filter(course => 

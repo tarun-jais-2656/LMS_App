@@ -15,6 +15,7 @@ export default function MyCart() {
     const [isModalVisible, setModalVisible] = useState(false);
     const dispatch = useDispatch();
     const myCartCourses = useSelector(state => state.cart);
+    console.log(myCartCourses)
     let total = 0;
     myCartCourses.forEach(course => {
         total += course.price;
@@ -62,6 +63,7 @@ export default function MyCart() {
                             price: item.price,
                             image_480x270: item.image_480x270,
                             visible_instructors: item.visible_instructors,
+                            visible_instructors_img:item.visible_instructors_img,
                             videoUrl: item.videoUrl,
                         });
                 }

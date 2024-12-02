@@ -40,7 +40,7 @@ const ProgrammingCourses = () => {
                 );
 
                 // Enrich the API response with video data
-                // console.log(response);
+                console.log(response);
                 const enrichedCourses = enrichCoursesWithVideos(response.data.unit.items);
                 setCourses(enrichedCourses);
                 setLoading(false);

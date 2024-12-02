@@ -7,7 +7,7 @@ const PaidCoursesSlice = createSlice({
   reducers: {
     addToPaidCourses: (state, action) => {
       state.push(action.payload);
-      console.log("00000000000=========>",action.payload);
+      // console.log("00000000000=========>",action.payload);
     },
     clearPaidCourses: (state) => {
       return []; 

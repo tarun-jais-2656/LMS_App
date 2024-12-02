@@ -39,6 +39,18 @@ export const icon={
     drop:require('../icons/drop.png'),
     gallery:require('../icons/gallery.png'),
     cam:require('../icons/cam.png'),
+    certificate:require('../icons/certificate.png'),
     avatar:require('../icons/avatar.png'),
+    phone:require('../icons/phone.png'),
+    limitless:require('../icons/limitless.png'),
+    coding:require('../icons/coding.png'),
+    article:require('../icons/article.png'),
+    file1:require('../icons/file1.png'),
+    hours1:require('../icons/hours1.png'),
+    assign:require('../icons/assign.png'),
+    star:require('../icons/star.png'),
+    dot:require('../icons/dot.png'),
+    rating:require('../icons/rating.png'),
+    play:require('../icons/play.png'),
 
 }

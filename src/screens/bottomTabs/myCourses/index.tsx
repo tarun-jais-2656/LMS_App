@@ -1,12 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect } from "react";
-import { FlatList, Text, View, StyleSheet, SafeAreaView, Alert } from "react-native";
+import { FlatList, Text, View, StyleSheet, SafeAreaView, Alert, TouchableOpacity, Image, Dimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore';
 import { addToPaidCourses } from "../../../redux/paidCourses/paidCoursesSlice";
+import { useNavigation } from "@react-navigation/native";
 
-
+const { width } = Dimensions.get('window');
 export function MyCourses() {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const paidCourses = useSelector(state => state.paidCourses); // Get paid courses from Redux
   console.log("===purchased========>", paidCourses)
@@ -40,21 +42,36 @@ export function MyCourses() {
     fetchPaidCourses();
   }, []);
 
+  const handleNav = (course) => {
+    navigation.navigate('CoursePlaylist', { course });
+  };
 
 
-  const renderCourse = ({ item }) => (
-    <View style={styles.card}>
-      <Text style={styles.title}>{item.title}</Text>
-      {/* <Text style={styles.name}>{item.visible_instructors}</Text> */}
-      <Text style={styles.hours}>Price:  <Text style={styles.colorTxt1}>${item.price}</Text></Text>
-    </View>
-  );
+
+  const renderCourse = ({ item }) => {
+    return (
+      <TouchableOpacity  onPress={() => handleNav(item)}>
+        <View style={styles.card}>
+          <View style={styles.imgRemove}>
+            <Image source={{ uri: item.image_480x270 }} style={styles.image} />
+            <TouchableOpacity style={styles.removeBtn}>
+              <Text style={styles.txt}>Enrolled</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.name}>{item.visible_instructors}</Text>
+        </View>
+      </TouchableOpacity>
+    )
+  };
+
 
   return (
     <SafeAreaView style={{ flex: 1, marginHorizontal: 16 }}>
       <FlatList
         data={paidCourses}
         renderItem={renderCourse}
+        showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id.toString()}
       />
     </SafeAreaView>
@@ -73,6 +90,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
+  imgRemove: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  removeBtn: {
+    backgroundColor: "#9dcf82",
+    justifyContent: 'center',
+    marginVertical: 30,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+  },
+  txt: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#FFFFFF'
+  },
+  image: {
+    height: 100,
+    width: width / 2,
+    borderRadius: 8,
+  },
   title: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -82,10 +120,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'gray',
     marginVertical: 5,
-  },
-  hours: {
-    fontSize: 16,
-    marginBottom: 10,
   },
   colorTxt1: {
     fontWeight: '700',
