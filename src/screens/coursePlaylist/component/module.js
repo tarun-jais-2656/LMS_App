@@ -1,16 +1,19 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { icon } from "../../../assets/icons";
 
-export const Module = ({module,title}) => {
+const { width } = Dimensions.get('window');
+export const Module = ({module,title,handlenav}) => {
     return (
         <View style={styles.container}>
+            <TouchableOpacity onPress={handlenav}>
             <View style={styles.view}>
                 <Image source={icon.play} style={styles.play}/>
             </View>
-            <View>
+            </TouchableOpacity>
+            <View style={{width:width/2}}>
                 <Text style={styles.txt1}>{module}</Text>
-                <Text style={styles.txt}>{title}</Text>
+                <Text style={styles.txt} onPress={handlenav}>{title}</Text>
             </View>
         </View>
     )
@@ -36,7 +39,7 @@ const styles = StyleSheet.create({
     txt: {
         fontSize: 16,
         fontWeight: '700',
-        color: '#1d68ad'
+        color: '#1d68ad',
     },
     txt1: {
         fontSize: 16,

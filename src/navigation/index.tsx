@@ -13,6 +13,9 @@ import Player from "../screens/videoPlayer";
 import MyCart from "../screens/MyCart/myCart";
 import EditProfile from "../screens/editProfile";
 import { CoursePlaylist } from "../screens/coursePlaylist";
+import VideoPlayer from "../screens/videoPlayer";
+import { ChatScreen } from "../screens/chatScreen";
+
 
 type RootStackParamList = {
     Splash: undefined;
@@ -28,6 +31,8 @@ type RootStackParamList = {
     MyCart:undefined
     EditProfile:undefined
     CoursePlaylist:undefined
+    VideoPlayer:undefined
+    ChatScreen:undefined
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -99,6 +104,16 @@ const StackNavigation: React.FC = () => {
           <Stack.Screen
             name="CoursePlaylist"
             component={CoursePlaylist}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="VideoPlayer"
+            component={VideoPlayer}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ChatScreen"
+            component={ChatScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

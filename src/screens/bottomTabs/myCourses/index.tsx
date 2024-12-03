@@ -4,15 +4,14 @@ import { FlatList, Text, View, StyleSheet, SafeAreaView, Alert, TouchableOpacity
 import { useDispatch, useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore';
 import { addToPaidCourses } from "../../../redux/paidCourses/paidCoursesSlice";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get('window');
 export function MyCourses() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const paidCourses = useSelector(state => state.paidCourses); // Get paid courses from Redux
-  console.log("===purchased========>", paidCourses)
-
+  
   const fetchPaidCourses = async () => {
     try {
       const userUID = await AsyncStorage.getItem('userUID');
@@ -38,9 +37,9 @@ export function MyCourses() {
   };
 
 
-  useEffect(() => {
+  useFocusEffect(() => {
     fetchPaidCourses();
-  }, []);
+  });
 
   const handleNav = (course) => {
     navigation.navigate('CoursePlaylist', { course });

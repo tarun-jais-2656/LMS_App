@@ -52,5 +52,18 @@ export const icon={
     dot:require('../icons/dot.png'),
     rating:require('../icons/rating.png'),
     play:require('../icons/play.png'),
+    playbutton:require('../icons/playbutton.png'),
+    pause:require('../icons/pause.png'),
+    mute:require('../icons/mute.png'),
+    minimize:require('../icons/minimize.png'),
+    mediumvol:require('../icons/mediumvol.png'),
+    fullsize:require('../icons/fullsize.png'),
+    forward:require('../icons/forward.png'),
+    backward:require('../icons/backward.png'),
+    backs:require('../icons/backs.png'),
+    dots:require('../icons/dots.png'),
+    phonecall:require('../icons/phonecall.png'),
+    video:require('../icons/video.png'),
+    send:require('../icons/send.png'),
 
 }
