@@ -10,11 +10,12 @@ import Forgot from "../screens/forgot";
 import { BottomTab } from "./bottomTab";
 import CourseDetail from "../screens/courseDetail";
 import Player from "../screens/videoPlayer";
-import MyCart from "../screens/MyCart/myCart";
+import MyCart from "../screens/MyCart";
 import EditProfile from "../screens/editProfile";
 import { CoursePlaylist } from "../screens/coursePlaylist";
 import VideoPlayer from "../screens/videoPlayer";
 import { ChatScreen } from "../screens/chatScreen";
+import React from "react";
 
 
 type RootStackParamList = {
@@ -36,7 +37,6 @@ type RootStackParamList = {
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
 const StackNavigation: React.FC = () => {
     return (
       <NavigationContainer>

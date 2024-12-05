@@ -2,8 +2,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import React from "react";
 import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Module } from "./component/module";
-import { icon } from "../../assets/icons";
 import { Header } from "../../components/header";
+import styles from "./styles";
 const { width } = Dimensions.get('window');
 
 
@@ -36,7 +36,6 @@ export const CoursePlaylist = () => {
                     <Image source={{ uri: course.image_480x270 }} style={styles.image} />
                     <Text style={styles.title}>{course.title}</Text>
                     <Text style={styles.instructor}>Your Instructor</Text>
-
                     <View style={styles.flx}>
                         <Image source={{ uri: course.visible_instructors_img }} style={styles.profile} />
                         <View style={{ width: width / 1.6 }}>
@@ -62,63 +61,3 @@ export const CoursePlaylist = () => {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex:1
-    },
-    subCon:{
-        flex:1,
-        marginHorizontal: 16,
-        marginVertical:10
-    },
-    image: {
-        width: '100%',
-        height: 200,
-        borderRadius: 8,
-        marginBottom: 10,
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginTop: 10,
-    },
-    instructor: {
-        fontSize: 18,
-        fontWeight: '700',
-        marginTop: 20
-    },
-    colorTxt: {
-        color: 'grey',
-        marginVertical: 3
-    },
-    profile: {
-        backgroundColor: 'grey',
-        height: 100,
-        width: 100,
-        borderRadius: 100,
-        marginRight: 10
-    },
-    flx: {
-        flexDirection: 'row',
-        marginTop: 10,
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        paddingBottom: 10,
-        borderBottomColor: '#C8C8C8',
-    },
-    btn: {
-        backgroundColor: '#4a91bd',
-        paddingVertical: 10,
-        alignItems: 'center',
-        borderRadius: 10,
-        width: 'auto',
-        // alignSelf:'flex-end'
-    },
-    txt: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#fff'
-    },
-
-})

@@ -5,13 +5,14 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import firestore from '@react-native-firebase/firestore';
 import { icon } from "../../assets/icons";
+import styles from "./styles";
 
 export const ChatScreen = () => {
     const [messages, setMessages] = useState([]);
     const [userUID, setUserUID] = useState(null);
     const route = useRoute();
     const { course } = route.params;
-
+    const navigation = useNavigation();
     const chatImg = course.visible_instructors_img;
     const chatName = course.visible_instructors;
 
@@ -22,8 +23,6 @@ export const ChatScreen = () => {
 
     useEffect(() => {
         getUserUid();
-
-        // Fetch existing messages from Firestore when the screen is loaded
         if (userUID) {
             const unsubscribe = firestore()
                 .collection('users')
@@ -46,10 +45,8 @@ export const ChatScreen = () => {
                             },
                         };
                     });
-                    setMessages(fetchedMessages.reverse()); // Reverse messages to show latest at bottom
+                    setMessages(fetchedMessages.reverse());
                 });
-
-            // Cleanup subscription on unmount
             return () => unsubscribe();
         }
     }, [userUID, course.id]);
@@ -62,11 +59,7 @@ export const ChatScreen = () => {
             recieverId: course.id,
             createdAt: new Date(),
         };
-
-        // Append message to local state (GiftedChat will update the UI)
         setMessages(previousMessages => GiftedChat.append(previousMessages, myMsg));
-
-        // Store message in Firestore
         await firestore()
             .collection('users')
             .doc(userUID)
@@ -78,9 +71,6 @@ export const ChatScreen = () => {
                 createdAt: new Date(),
             });
     };
-
-    const navigation = useNavigation();
-
     const handleNav = () => {
         navigation.reset({
             index: 0,
@@ -91,7 +81,7 @@ export const ChatScreen = () => {
 
     return (
         <View style={styles.container}>
-            <SafeAreaView style={{ backgroundColor: 'skyblue' }}>
+            <SafeAreaView style={styles.bg}>
                 <View style={styles.header}>
                     <View style={styles.flx}>
                         <TouchableOpacity onPress={handleNav}>
@@ -134,15 +124,15 @@ export const ChatScreen = () => {
                         <Send {...props} containerStyle={{ justifyContent: 'center' }}>
                             <Image
                                 source={icon.send}
-                                style={{ height: 25, width: 25, marginRight: 15 }}
+                                style={styles.sendbtn}
                             />
                         </Send>
                     );
                 }}
                 renderInputToolbar={props => {
                     return (
-                        <View style={{ padding: 10, backgroundColor: '#F0F0F0' }}>
-                            <InputToolbar {...props} containerStyle={{ borderRadius: 10, justifyContent: 'center', marginBottom: 20 }} />
+                        <View style={styles.input}>
+                            <InputToolbar {...props} containerStyle={styles.inpCont} />
                         </View>
                     );
                 }}
@@ -162,37 +152,3 @@ export const ChatScreen = () => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    header: {
-        backgroundColor: 'skyblue',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 5,
-        justifyContent: 'space-between',
-    },
-    name: {
-        fontSize: 20,
-        fontWeight: '700',
-    },
-    back: {
-        height: 25,
-        width: 25,
-        marginHorizontal: 10,
-    },
-    img: {
-        backgroundColor: 'grey',
-        height: 80,
-        width: 80,
-        borderRadius: 100,
-        marginRight: 10,
-    },
-    flx: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-});

@@ -4,15 +4,14 @@ import { icon } from "../../assets/icons";
 import { useNavigation } from "@react-navigation/native";
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import styles from "./styles";
 
 
 const Splash = () => {
     const navigation = useNavigation()
     const [user, setUser] = useState();
-    // console.log(user)
     const onAuthStateSave = (user: any) => setUser(user)
     
-
     const getUserUid = async () => {
         try {
           const uid = await AsyncStorage.getItem('userUID');
@@ -52,9 +51,6 @@ const Splash = () => {
         getUserUid();
     }, [user]);
 
-
-
-
     return (
         <View style={styles.container}>
             <Image
@@ -66,6 +62,3 @@ const Splash = () => {
 
 export default Splash;
 
-const styles = StyleSheet.create({
-    container: { justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: '#51a6f5' },
-});

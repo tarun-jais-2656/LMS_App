@@ -66,4 +66,10 @@ export const icon={
     video:require('../icons/video.png'),
     send:require('../icons/send.png'),
     emptyCart:require('../icons/emptyCart.png'),
+    77:require('../icons/77.jpg'),
+    100:require('../icons/100.jpg'),
+    66:require('../icons/66.jpg'),
+    44:require('../icons/44.jpg'),
+    11:require('../icons/11.jpg'),
+
 }

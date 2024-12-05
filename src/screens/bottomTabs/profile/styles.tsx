@@ -13,7 +13,7 @@ const styles=StyleSheet.create({
     cont:{ flexDirection: 'row', alignItems: 'center', margin: 20 },
     img:{ height: 40, width: 40 },
     txt:{ fontSize: 14, fontWeight: '600', marginLeft: 16 },
-
+    flx:{ flexDirection: 'row' },
 })
 
 export default styles;

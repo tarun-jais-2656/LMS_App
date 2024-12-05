@@ -8,33 +8,33 @@ import { Image } from "react-native";
 import { icon } from "../../assets/icons";
 
 
-const Tabs=createBottomTabNavigator();
-export function BottomTab(){
-    return(
+const Tabs = createBottomTabNavigator();
+export function BottomTab() {
+    return (
         <Tabs.Navigator
-        screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-                let iconI;
-                if (route.name === 'Home') {
-                    iconI = icon.home
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconI;
+                    if (route.name === 'Home') {
+                        iconI = icon.home
+                    }
+                    if (route.name === 'Search') {
+                        iconI = icon.search
+                    }
+                    if (route.name === 'MyCourses') {
+                        iconI = icon.courses
+                    }
+                    if (route.name === 'Profile') {
+                        iconI = icon.profile
+                    }
+                    return <Image
+                        source={iconI}
+                        style={{ width: 20, height: 20, tintColor: focused ? color : 'black' }}
+                    />
                 }
-                if (route.name === 'Search') {
-                    iconI = icon.search
-                }
-                if (route.name === 'MyCourses') {
-                    iconI = icon.courses
-                }
-                if (route.name === 'Profile') {
-                    iconI = icon.profile
-                }
-                return <Image
-                    source={iconI}
-                    style={{ width: 20, height: 20,tintColor:focused ? color:'black'}}
-                />
-            }
 
-        }
-        )}
+            }
+            )}
         >
             <Tabs.Screen
                 component={Home}

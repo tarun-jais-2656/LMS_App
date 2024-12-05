@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, Image, SafeAreaView, TouchableOpacity, TextInput, FlatList, } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import styles from "./styles";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { icon } from "../../assets/icons";
 import Modal from "react-native-modal";
+import styles from "./styles";
 
 const EditProfile = ({ navigation }) => {
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -136,6 +136,13 @@ const EditProfile = ({ navigation }) => {
                             </View>
                         </TouchableOpacity>
                     </View>
+                    <TextInput style={styles.name} placeholder="Email" />
+
+                    <View style={styles.updateButton}>
+                        <TouchableOpacity>
+                            <Text style={styles.updateButtonTxt}>Update</Text>
+                        </TouchableOpacity>
+                    </View>
 
                     <Modal transparent={true} visible={genderModalVisible} animationType="slide">
                         <View style={styles.genderModalView}>
@@ -155,15 +162,7 @@ const EditProfile = ({ navigation }) => {
                             </View>
                         </View>
                     </Modal>
-                    <View style={styles.emailView}>
-                        <TextInput placeholder="Email ID" style={styles.email} />
-                    </View>
-
-                    <View style={styles.updateButton}>
-                        <TouchableOpacity>
-                            <Text style={styles.updateButtonTxt}>Update</Text>
-                        </TouchableOpacity>
-                    </View>
+                    
                 </View>
             </View>
 

@@ -29,7 +29,7 @@ export const Profile = () => {
                 <View style={styles.txtView}>
                     <Text style={styles.txt1}>{name}</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={styles.flx}>
                             <Text style={styles.txt2}>Account Settings</Text>
                             <Image source={icon.next}
                                 style={styles.nextImg}

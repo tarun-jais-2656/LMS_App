@@ -6,6 +6,7 @@ const MyCartSlice = createSlice({
     reducers: {
         addCourseToCart(state, action) {
             state.push(action.payload);
+            // console.log(action.payload)
         },
         removeFromCart: (state, action) => {
             return state.filter(course => course.id !== action.payload);
