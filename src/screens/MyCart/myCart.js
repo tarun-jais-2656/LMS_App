@@ -8,14 +8,17 @@ import { clearCart, removeFromCart } from "/Users/ai/Desktop/Projects/LMS/src/re
 import { addCourseToCart } from "../../redux/myCart/myCartSlice";
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { icon } from "../../assets/icons";
+import { Header } from "../../components/header";
+import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get('window');
 
 export default function MyCart() {
+    const navigation=useNavigation();
     const [isModalVisible, setModalVisible] = useState(false);
     const dispatch = useDispatch();
     const myCartCourses = useSelector(state => state.cart);
-    console.log(myCartCourses)
     let total = 0;
     myCartCourses.forEach(course => {
         total += course.price;
@@ -56,34 +59,34 @@ export default function MyCart() {
                         .collection('users')
                         .doc(userUID)
                         .collection('paidCourses')
-                        .doc(item.id.toString())  
+                        .doc(item.id.toString())
                         .set({
                             id: item.id,
                             title: item.title,
                             price: item.price,
                             image_480x270: item.image_480x270,
                             visible_instructors: item.visible_instructors,
-                            visible_instructors_img:item.visible_instructors_img,
+                            visible_instructors_img: item.visible_instructors_img,
                             videoUrl: item.videoUrl,
                         });
                 }
-               
+
                 dispatch(clearCart());
                 setModalVisible(false);
 
                 await firestore()
-                .collection('users')
-                .doc(userUID)
-                .collection('cart')
-                .get()
-                .then(querySnapshot => {
-                    if (!querySnapshot.empty) {
-                        querySnapshot.forEach(doc => doc.ref.delete());
-                    }
-                });
+                    .collection('users')
+                    .doc(userUID)
+                    .collection('cart')
+                    .get()
+                    .then(querySnapshot => {
+                        if (!querySnapshot.empty) {
+                            querySnapshot.forEach(doc => doc.ref.delete());
+                        }
+                    });
 
                 Alert.alert("Payment done successfully.");
-                
+
             } else {
                 Alert.alert('User ID not found.');
             }
@@ -145,21 +148,38 @@ export default function MyCart() {
         )
     };
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <FlatList
-                data={myCartCourses}
-                renderItem={renderCourse}
-                keyExtractor={(item) => item.id.toString()}
-                showsVerticalScrollIndicator={false}
-            />
+    const handleNav = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'BottomTab', params: { screen: 'Home' } }]
+        });
 
-            <View style={styles.txtView}>
-                <Text style={styles.txt2}>Total Price: ${total}</Text>
-                <TouchableOpacity style={styles.btn} onPress={() => setModalVisible(!isModalVisible)}>
-                    <Text style={styles.txtBtn}>Go For Payment</Text>
-                </TouchableOpacity>
-            </View>
+    };
+
+    return (
+        <View style={styles.container1}>
+        <Header title={"MyCart"} onpress={handleNav}/>
+        <View style={styles.container}>
+            {myCartCourses.length > 0 ?
+                <View style={{flex:1,marginTop:10}}>
+                    <FlatList
+                        data={myCartCourses}
+                        renderItem={renderCourse}
+                        keyExtractor={(item) => item.id.toString()}
+                        showsVerticalScrollIndicator={false}
+                    />
+                    <View style={styles.txtView}>
+                        <Text style={styles.txt2}>Total Price: ${total}</Text>
+                        <TouchableOpacity style={styles.btn} onPress={() => setModalVisible(!isModalVisible)}>
+                            <Text style={styles.txtBtn}>Go For Payment</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                : <View style={styles.empty}>
+                    <Image source={icon.emptyCart} style={styles.emptyCart}/>
+                    <Text style={styles.txtCart}>Your cart is empty!</Text>
+                </View>
+            }
 
             <Modalpay
                 isModalVisible={isModalVisible}
@@ -167,11 +187,15 @@ export default function MyCart() {
                 total={total}
                 handlePayment={handlePayment}
             />
-        </SafeAreaView>
+        </View>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
+    container1:{
+        flex:1
+    },
     container: {
         flex: 1,
         marginHorizontal: 16,
@@ -226,8 +250,8 @@ const styles = StyleSheet.create({
         fontWeight: '700'
     },
     txtView: {
-        paddingVertical: 20,
-        alignItems: 'center'
+        paddingBottom: 20,
+        alignItems: 'center',
     },
     txt2: {
         fontSize: 20,
@@ -245,5 +269,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 5,
         borderRadius: 10
+    },
+    empty:{
+        flex:0.8,
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    emptyCart:{
+        height:300,
+        width:300
+    },
+    txtCart:{
+        fontSize:18,
+        fontWeight:'600',
+        color:'#bf73f5'
     }
 });

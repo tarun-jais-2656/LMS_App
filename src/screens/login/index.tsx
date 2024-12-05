@@ -53,7 +53,7 @@ const Login = () => {
             const name = email.replace('@gmail.com', '') 
             await AsyncStorage.setItem('name', name);
             Alert.alert('Login successfully!');
-            navigation.navigate('BottomTab');
+            navigation.reset({index:0,routes:[{name:'BottomTab'}]});
         } catch (error) {
             if (error.code === 'auth/wrong-password') {
                 Alert.alert('Password is incorrect!');
@@ -80,6 +80,7 @@ const Login = () => {
                 />
                 <TextInput
                     placeholder="Enter your email"
+                    placeholderTextColor={"grey"}
                     style={styles.textInput}
                     value={email}
                     onChangeText={value => setEmail(value)}
@@ -93,6 +94,7 @@ const Login = () => {
                     />
                     <TextInput
                         placeholder="Enter your password"
+                        placeholderTextColor={"grey"}
                         style={styles.textInput}
                         numberOfLines={1}
                         value={pass}

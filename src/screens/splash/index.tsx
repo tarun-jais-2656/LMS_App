@@ -37,10 +37,14 @@ const Splash = () => {
 
     useEffect(() => {
         if (user !== undefined) {
-            setTimeout(() => {
+            setTimeout(async() => {
+                const tut=await AsyncStorage.getItem('tut')
                 if (user) {
-                    navigation.navigate('BottomTab');
-                } else {
+                    navigation.reset({index:0,routes:[{name:'BottomTab'}]});
+                } else if(tut){
+                    navigation.reset({index:0,routes:[{name:'Login'}]});
+                }
+                else {
                     navigation.reset({index:0,routes:[{name:'GetStarted'}]});
                 }
             }, 2000);

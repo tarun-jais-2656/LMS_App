@@ -4,23 +4,41 @@ import { View, FlatList, Text, TextInput, StyleSheet, SafeAreaView, TouchableOpa
 import { useSelector } from 'react-redux';
 
 export function Search() {
-    const navigation=useNavigation();
+    const navigation = useNavigation();
     const [query, setQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const allCourses = useSelector(state => state.course);
-    const [filteredCourses, setFilteredCourses] = useState(allCourses);
-
+    const [filteredCourses, setFilteredCourses] = useState([]);
+    const tag = ['Programming', 'FrontEnd', 'BackEnd', 'LatestTech', 'CoreSkills', 'Development']
     const handleNav = (course) => {
-        navigation.navigate('CourseDetail', { course }); 
+        navigation.navigate('CourseDetail', { course });
     };
 
-   
     useEffect(() => {
-        setFilteredCourses(
-            allCourses.filter(course => 
+        let filtered = [];
+        if (selectedCategory) {
+            if (selectedCategory === 'allCourses') {
+                filtered = allCourses;
+            } else {
+                filtered = allCourses.filter(course => course.cat.toLowerCase() === selectedCategory.toLowerCase());
+            }
+        }
+        if (query !== '') {
+            filtered = filtered.filter(course =>
                 course.title.toLowerCase().includes(query.toLowerCase())
-            )
-        );
-    }, [query, allCourses]);
+            );
+        }
+        if (query === '' && selectedCategory === null) {
+            filtered = [];
+        }
+        if (query !== '' && selectedCategory === null) {
+            filtered = allCourses.filter(course =>
+                course.title.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        setFilteredCourses(filtered);
+    }, [query, selectedCategory, allCourses]);
 
     const renderCourse = ({ item }) => (
         <TouchableOpacity onPress={() => handleNav(item)}>
@@ -43,11 +61,37 @@ export function Search() {
                 value={query}
                 onChangeText={setQuery}
             />
+
+            <View style={styles.categoryContainer}>
+                <TouchableOpacity
+                    style={[
+                        styles.categoryButton,
+                        selectedCategory === 'allCourses' && styles.selectedCategory
+                    ]}
+                    onPress={() => setSelectedCategory('allCourses')}
+                >
+                    <Text style={styles.categoryText}>All Courses</Text>
+                </TouchableOpacity>
+
+                {tag.map(category => (
+                    <TouchableOpacity
+                        key={category}
+                        style={[
+                            styles.categoryButton,
+                            selectedCategory === category && styles.selectedCategory
+                        ]}
+                        onPress={() => setSelectedCategory(selectedCategory === category ? null : category)}
+                    >
+                        <Text style={styles.categoryText}>{category}</Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
             <FlatList
                 data={filteredCourses}
                 renderItem={renderCourse}
                 keyExtractor={(item) => item.id.toString()}
             />
+
         </SafeAreaView>
     );
 }
@@ -56,7 +100,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        marginHorizontal:16
+        marginHorizontal: 16,
     },
     searchInput: {
         height: 40,
@@ -66,12 +110,31 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         borderRadius: 8,
     },
+    categoryContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginBottom: 20,
+    },
+    categoryButton: {
+        backgroundColor: 'lightgrey',
+        borderRadius: 20,
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        marginRight: 10,
+        marginBottom: 10,
+    },
+    selectedCategory: {
+        backgroundColor: '#007BFF',
+    },
+    categoryText: {
+        fontSize: 14,
+        color: '#333',
+    },
     card: {
         backgroundColor: 'white',
         borderRadius: 8,
-        // marginRight: 16,
-        marginBottom:10,
-        height:350,
+        marginBottom: 10,
+        height: 350,
         padding: 10,
         elevation: 5, // Shadow for Android
         shadowColor: '#000', // Shadow for iOS
@@ -99,5 +162,9 @@ const styles = StyleSheet.create({
         marginTop: 5,
         fontWeight: 'bold',
     },
+    noCoursesText: {
+        fontSize: 16,
+        textAlign: 'center',
+        color: 'gray',
+    },
 });
-

@@ -4,6 +4,8 @@ import Video from "react-native-video";
 import { icon } from "../../assets/icons";
 import Slider from '@react-native-community/slider';
 import Orientation from 'react-native-orientation-locker';
+import { Header } from "../../components/header";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window"); // Get screen dimensions
 
@@ -45,10 +47,20 @@ export default function VideoPlayer() {
 //   const handleSeek = value => {
 //     ref.current.seek(value);
 //   };
+const navigation=useNavigation();
+const handleNav = () => {
+  navigation.reset({
+      index: 0,
+      routes: [{ name: 'CoursePlaylist', params: { screen: 'course' } }]
+  });
+
+};
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View>
+      <Header title={"VideoPlayer"}/>
+    <View style={styles.container}>
       <TouchableOpacity
         style={{ width: width, height: fullScreen ? '100%' : height / 3 }}
         onPress={() => setClicked(!clicked)}
@@ -121,7 +133,8 @@ export default function VideoPlayer() {
           </TouchableOpacity>
         )}
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
+    </View>
   );
 }
 

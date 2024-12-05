@@ -1,16 +1,38 @@
-import React from "react";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { icon } from "../../assets/icons";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 import Button from "../../components/button";
 import { useNavigation } from "@react-navigation/native";
+import { firebase } from "@react-native-firebase/auth";
 
 export default function Forgot() {
-    const navigation=useNavigation();
+    const navigation = useNavigation();
+    const [email, setEmail] = useState('');
+    // const [emailError,setEmailError]=useState('');
 
-    const handleSend=()=>{
-        navigation.navigate('Otp')
+    const handleNav = () => {
+        navigation.reset({index:0,routes:[{name:'Login'}]});
     }
+
+    const handleForgotPassword = async () => {
+        if (!email) {
+            console.log('Please enter your email address');
+            return;
+        }
+
+        try {
+            await firebase.auth().sendPasswordResetEmail(email);
+            setEmail('')
+            Alert.alert('Password reset email sent!')
+            console.log('Password reset email sent!');
+            // handleSend();
+            //   setResetPasswordEmailSent(true);
+        } catch (error) {
+            console.log('Error sending reset email:', error);
+            //   setEmailError('Error sending reset password email');
+        }
+    };
 
 
     return (
@@ -27,10 +49,20 @@ export default function Forgot() {
                 />
                 <TextInput
                     placeholder="Enter your email"
+                    placeholderTextColor={"grey"}
+                    numberOfLines={1}
                     style={styles.textInput}
+                    value={email}
+                    onChangeText={value => setEmail(value)}
                 />
             </View>
-            <Button title="Send" onPress={handleSend}/>
+            <Button title="Send" onPress={handleForgotPassword} />
+            <View style={styles.txtMainView}>
+                <View style={styles.txtView}>
+                    <Text style={styles.back}>Back To? </Text>
+                    <Text style={styles.txtColor} onPress={handleNav}>Sign In</Text>
+                </View>
+            </View>
         </View>
     )
 }
@@ -48,7 +80,7 @@ const styles = StyleSheet.create({
     txt: {
         fontSize: 25,
         fontWeight: '700',
-        marginBottom:10 ,
+        marginBottom: 10,
     },
     txt1: {
         color: 'grey'
@@ -60,7 +92,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 15,
         flexDirection: 'row',
-        width:responsiveWidth(88),
+        width: responsiveWidth(88),
     },
     email: {
         height: 25,
@@ -70,4 +102,16 @@ const styles = StyleSheet.create({
     textInput: {
         marginHorizontal: 15,
     },
+    txtMainView:{
+        alignItems:'center'
+    },
+    txtView: {
+        flexDirection: 'row'
+    },
+    txtColor:{
+        color:'#51a6f5'
+    },
+    back:{
+        fontWeight:'600',
+    }
 })

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { icon } from "../../assets/icons";
 import AppIntroSlider from "react-native-app-intro-slider";
 import { useNavigation } from "@react-navigation/native";
 import { Alert, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 import Login from "../login";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const data=[
     {
         id: 1,
@@ -43,34 +44,33 @@ const renderItem=({item})=>(
 
 const Tutorial=()=>{
     const navigation = useNavigation()
+    const [tut,setTut]=useState('flase');
+
+    const onPress=async()=>{
+        setTut('true')
+        await AsyncStorage.setItem('tut', tut);
+        navigation.navigate('Login')
+    }
     return(
         <SafeAreaView style={styles.container}>
         <AppIntroSlider
         renderItem={renderItem}
         data={data}
         onDone={()=>{
-            navigation.navigate('Login')
+            navigation.reset({index:0,routes:[{name:'Login'}]});
         }}
         onSkip={()=>{
-            navigation.navigate('Login')
+            navigation.reset({index:0,routes:[{name:'Login'}]});
         }}
-        // renderNextButton={()=>(
-        //     <View>
-        //         <TouchableOpacity style={styles.btn}>
-        //             <Text style={styles.btnTxt}>Next</Text>
-        //         </TouchableOpacity>
-        //     </View>
-        // )}
-        // renderDoneButton={()=>(
-        //     <View>
-        //         <TouchableOpacity style={styles.btn}>
-        //             <Text style={styles.btnTxt}>Done</Text>
-        //         </TouchableOpacity>
-        //     </View>
-        // )}
+        renderNextButton={()=>(
+            <Text style={styles.btnTxt}>Next</Text>
+        )}
+        renderDoneButton={()=>(
+            <Text style={styles.btnTxt } onPress={onPress}>Done</Text>
+        )}
         showSkipButton={false}
         dotStyle={styles.dot}
-        bottomButton={true}
+        // bottomButton={true}
         activeDotStyle={styles.activeDot}
         />
         </SafeAreaView>
@@ -99,14 +99,14 @@ const styles=StyleSheet.create({
         fontWeight: '400',
         color:'grey',
     },
-    btn:{
-        backgroundColor:'#51a6f5',
-        width:responsiveWidth(92),
-        height:responsiveWidth(12),
-        borderRadius:10,
-        justifyContent:'center',
-        alignItems:'center'
-    },
+    // btn:{
+    //     backgroundColor:'#51a6f5',
+    //     width:responsiveWidth(92),
+    //     height:responsiveWidth(12),
+    //     borderRadius:10,
+    //     justifyContent:'center',
+    //     alignItems:'center'
+    // },
     dot:{
         width:responsiveWidth(2.5),
         height:responsiveWidth(2.5),
@@ -122,8 +122,9 @@ const styles=StyleSheet.create({
         marginHorizontal:5,
     },
     btnTxt:{
-        color:'#FFFFFF',
-        fontSize:15,
+        color:'#51a6f5',
+        fontSize:20,
         fontWeight:'700',
-    }
+        marginTop:10
+    },
 })

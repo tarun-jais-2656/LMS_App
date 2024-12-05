@@ -15,7 +15,7 @@ export const Profile = () => {
             await auth().signOut();
             await AsyncStorage.removeItem('userUID');
             await AsyncStorage.removeItem('name');
-            navigation.navigate('GetStarted');
+            navigation.reset({index:0,routes:[{name:'Login'}]});
         } catch (error) {
             Alert.alert("Unable to Logout");
         }

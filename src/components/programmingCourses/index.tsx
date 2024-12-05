@@ -22,21 +22,22 @@ const ProgrammingCourses = () => {
             // console.log(video)
             return {
                 ...course,
-                videoUrl: video ? video[0].url : null,  
+                videoUrl: video ? video[0].url : null,
                 price: video ? video[0].price : null,
+                cat: video ? video[0].cat : null,
             };
         });
     };
 
     const handleNav = (course) => {
-        navigation.navigate('CourseDetail', { course }); 
+        navigation.navigate('CourseDetail', { course });
     };
 
     useEffect(() => {
         const fetchCourses = async () => {
             try {
                 const response = await axios.get(
-                    'https://www.udemy.com/api-2.0/discovery-units/all_courses/?page_size=15&subcategory=&instructional_level=&lang=&price=&duration=&closed_captions=&subs_filter_type=&subcategory_id=8&source_page=subcategory_page&locale=en_US&navigation_locale=en&skip_price=true&sos=ps&fl=scat'
+                    'https://www.udemy.com/api-2.0/discovery-units/all_courses/?page_size=60&subcategory=&instructional_level=&lang=&price=&duration=&closed_captions=&subs_filter_type=&subcategory_id=8&source_page=subcategory_page&locale=en_US&navigation_locale=en&skip_price=true&sos=ps&fl=scat'
                 );
 
                 // Enrich the API response with video data
@@ -63,6 +64,12 @@ const ProgrammingCourses = () => {
     }, [courses]);
 
     const myCourses = useSelector(state => state.course);
+    const first= myCourses.slice(0, 10);
+    const second = myCourses.slice(10,20);
+    const third=myCourses.slice(20,30);
+    console.log(first)
+    console.log(second)
+    console.log(third)
 
     const renderCourse = ({ item }) => (
         <TouchableOpacity onPress={() => handleNav(item)}>
@@ -78,27 +85,56 @@ const ProgrammingCourses = () => {
     );
 
     return (
-        <View style={styles.container}>
-            {loading ? (
-                <Text>Loading...</Text>
-            ) : (
-                <FlatList
-                    data={myCourses}
-                    renderItem={renderCourse}
-                    keyExtractor={(item) => item.id.toString()}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                />
-            )}
+        <View>
+            <View style={styles.container}>
+                {loading ? (
+                    <Text>Loading...</Text>
+                ) : (
+                    <FlatList
+                        data={first}
+                        renderItem={renderCourse}
+                        keyExtractor={(item) => item.id.toString()}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />
+                )}
+            </View>
+
+            <View style={styles.container}>
+                {loading ? (
+                    <Text>Loading...</Text>
+                ) : (
+                    <FlatList
+                        data={second}
+                        renderItem={renderCourse}
+                        keyExtractor={(item) => item.id.toString()}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />
+                )}
+            </View>
+
+            <View style={styles.container}>
+                {loading ? (
+                    <Text>Loading...</Text>
+                ) : (
+                    <FlatList
+                        data={third}
+                        renderItem={renderCourse}
+                        keyExtractor={(item) => item.id.toString()}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />
+                )}
+            </View>
         </View>
+
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 20,
-        marginBottom: 20,
     },
     card: {
         backgroundColor: 'white',
@@ -106,13 +142,14 @@ const styles = StyleSheet.create({
         marginRight: 16,
         width: width * 0.8,
         // aspectRatio: 1,
-        height:350,
+        height: 350,
         padding: 10,
         elevation: 5, // Shadow for Android
         shadowColor: '#000', // Shadow for iOS
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
+        marginVertical:20
     },
     image: {
         width: '100%',

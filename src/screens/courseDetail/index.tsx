@@ -8,6 +8,7 @@ import { addToPaidCourses } from "/Users/ai/Desktop/Projects/LMS/src/redux/paidC
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import firestore from '@react-native-firebase/firestore';
 import { icon } from "../../assets/icons";
+import { Header } from "../../components/header";
 
 const { width, height } = Dimensions.get("window");
 
@@ -85,15 +86,19 @@ export default function CourseDetail() {
             Alert.alert('Error adding paidCourse.');
         }
     };
+    const handleNav = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'BottomTab'}]
+        });
+
+    };
 
     return (
+        <View style={styles.container1}>
+            <Header title={"CourseDetail"} onpress={handleNav}/>
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                {/* <Video
-                source={{ uri: course.videoUrl}}
-                style={styles.video}
-                resizeMode="contain"
-            /> */}
                 {course ? (
                     <>
                         <Image source={{ uri: course.image_480x270 }} style={styles.image} />
@@ -233,10 +238,14 @@ export default function CourseDetail() {
                 />
             </ScrollView>
         </SafeAreaView>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
+    container1: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         marginHorizontal: 16,

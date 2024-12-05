@@ -65,5 +65,5 @@ export const icon={
     phonecall:require('../icons/phonecall.png'),
     video:require('../icons/video.png'),
     send:require('../icons/send.png'),
-
+    emptyCart:require('../icons/emptyCart.png'),
 }

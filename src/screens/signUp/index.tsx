@@ -8,18 +8,19 @@ import auth from '@react-native-firebase/auth';
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+    const [name,setName]=useState('');
 
     const navigation = useNavigation();
     const handleNav = () => {
-        navigation.navigate('Login');
-    }
-    const handleNavOtp = () => {
-        navigation.navigate('Otp');
+        navigation.reset({index:0,routes:[{name:'Login'}]});
     }
 
     const onRegister = () => {
         auth().createUserWithEmailAndPassword(email, pass)
             .then(() => {
+                setEmail('');
+                setPass('');
+                setName('');
                 Alert.alert('User account created.');
             }).catch(error => {
                 if (error.code === 'auth/email-already-in-use') {
@@ -49,7 +50,11 @@ const SignUp = () => {
                 />
                 <TextInput
                     placeholder="Enter your name"
+                    placeholderTextColor={"grey"}
+                    numberOfLines={1}
                     style={styles.textInput}
+                    value={name}
+                    onChangeText={value => setName(value)}
                 />
             </View>
             <View style={styles.emailView}>
@@ -59,6 +64,8 @@ const SignUp = () => {
                 />
                 <TextInput
                     placeholder="Enter your email"
+                    placeholderTextColor={"grey"}
+                    numberOfLines={1}
                     style={styles.textInput}
                     value={email}
                     onChangeText={value => setEmail(value)}
@@ -72,6 +79,7 @@ const SignUp = () => {
                     />
                     <TextInput
                         placeholder="Enter your password"
+                        placeholderTextColor={"grey"}
                         style={styles.textInput}
                         numberOfLines={1}
                         value={pass}

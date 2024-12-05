@@ -42,7 +42,10 @@ const EditProfile = ({ navigation }) => {
     };
 
     const handleNavBack = () => {
-        navigation.navigate('BottomTab', { screen: 'Profile' });
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'BottomTab', params: { screen: 'Profile' } }],
+        });
     };
 
     const toggleGenderModal = () => {

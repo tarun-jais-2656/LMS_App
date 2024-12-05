@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { icon } from "../../../assets/icons";
 import { responsiveWidth } from "react-native-responsive-dimensions";
@@ -28,6 +28,7 @@ const bannerData = [
 
 export function Home() {
     const navigation=useNavigation();
+    const inputRef = useRef(null);
     const CourseItem = ({ name, img, price }) => (
         <View style={styles.item}>
             <Image source={{ uri: img }} style={styles.image} />
@@ -39,6 +40,12 @@ export function Home() {
     );
 
     
+    const handleNav=()=>{
+        if (inputRef.current) {
+            inputRef.current.blur();
+        }
+        navigation.navigate('Search')
+    }
 
     const name=AsyncStorage.getItem('name')
     
@@ -74,6 +81,8 @@ export function Home() {
                     placeholder="Search"
                     style={styles.searchInput}
                     numberOfLines={1}
+                    onFocus={handleNav}
+                    ref={inputRef}
                 />
             </View>
             <ScrollView>
@@ -88,12 +97,15 @@ export function Home() {
                         <View key={index} style={styles.slide}>
                             <Image
                                 source={item.bannerImageUrl}
-                                style={{ width: 380, height: 200 }}
+                                style={{ width: "auto", height: 200 }}
                             />
                         </View>
                     ))}
                 </Swiper>
             </View>
+            <Text style={styles.heading}>Recommended Courses</Text>
+            <ProgrammingCourses />
+            <Text style={styles.heading}>Trending Courses</Text>
             <View>
                 <FlatList
                     data={courses.courses}
@@ -103,7 +115,6 @@ export function Home() {
                     showsHorizontalScrollIndicator={false}
                 />
             </View>
-            <ProgrammingCourses />
             </ScrollView>
         </SafeAreaView>
     )
@@ -223,6 +234,13 @@ const styles = StyleSheet.create({
         width: 38,
         height: 22,
         top: -15,
+    },
+    heading:{
+        fontSize:20,
+        fontWeight:'700',
+        marginLeft:16,
+        marginTop:30,
+        marginBottom:10
     },
 
     backgroundViewButtonContainer: {
