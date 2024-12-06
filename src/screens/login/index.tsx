@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { icon } from "../../assets/icons";
 import { useNavigation } from "@react-navigation/native";
 import auth from '@react-native-firebase/auth';
@@ -77,90 +77,95 @@ const Login = () => {
         }
     };
 
-    const togglepass=()=>{
+    const togglepass = () => {
         setSecure(!secure);
     }
-    
+
 
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <View style={styles.imgView}>
-                    <Image
-                        source={icon.sign_in}
-                        style={styles.signin}
-                    />
-                    <Text style={styles.txt}>Welcome Back!</Text>
-                    <Text style={styles.txt1}>Login to your existing account of Appinventiv</Text>
-                </View>
-                <View style={styles.emailView}>
-                    <Image
-                        source={icon.email}
-                        style={styles.email}
-                    />
-                    <TextInput
-                        placeholder="Enter your email"
-                        placeholderTextColor={"grey"}
-                        style={styles.textInput}
-                        value={email}
-                        onChangeText={value => setEmail(value)}
-                        onBlur={handleBlurEmail}
-                    />
-                </View>
-                {!emailValid && <Text style={styles.errorText}>{emailErrorMessage}</Text>}
-                <View style={styles.passView}>
-                    <View style={styles.view1}>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.imgView}>
                         <Image
-                            source={icon.pass}
+                            source={icon.sign_in}
+                            style={styles.signin}
+                        />
+                        <Text style={styles.txt}>Welcome Back!</Text>
+                        <Text style={styles.txt1}>Login to your existing account of Appinventiv</Text>
+                    </View>
+                    <View style={styles.emailView}>
+                        <Image
+                            source={icon.email}
                             style={styles.email}
                         />
                         <TextInput
-                            placeholder="Enter your password"
+                            placeholder="Enter your email"
                             placeholderTextColor={"grey"}
                             style={styles.textInput}
-                            numberOfLines={1}
-                            secureTextEntry={secure}
-                            value={pass}
-                            onChangeText={value => setPass(value)}
+                            value={email}
+                            onChangeText={value => setEmail(value)}
+                            onBlur={handleBlurEmail}
                         />
                     </View>
-                    <TouchableOpacity onPress={togglepass}>
-                    <Image
-                        source={icon.eye}
-                        style={styles.eye}
-                    />
+                    {!emailValid && <Text style={styles.errorText}>{emailErrorMessage}</Text>}
+                    <View style={styles.passView}>
+                        <View style={styles.view1}>
+                            <Image
+                                source={icon.pass}
+                                style={styles.email}
+                            />
+                            <TextInput
+                                placeholder="Enter your password"
+                                placeholderTextColor={"grey"}
+                                style={styles.textInput}
+                                numberOfLines={1}
+                                secureTextEntry={secure}
+                                value={pass}
+                                onChangeText={value => setPass(value)}
+                            />
+                        </View>
+                        <TouchableOpacity onPress={togglepass}>
+                            <Image
+                                source={icon.eye}
+                                style={styles.eye}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.forgotView}>
+                        <Text style={styles.forgotTxt} onPress={handleNavForgot}>Forgot password</Text>
+                    </View>
+                    <TouchableOpacity style={styles.btn} onPress={onLogin}>
+                        <Text style={styles.btntxt}>Sign In</Text>
                     </TouchableOpacity>
-                </View>
-                <View style={styles.forgotView}>
-                    <Text style={styles.forgotTxt} onPress={handleNavForgot}>Forgot password</Text>
-                </View>
-                <TouchableOpacity style={styles.btn} onPress={onLogin}>
-                    <Text style={styles.btntxt}>Sign In</Text>
-                </TouchableOpacity>
-                <View style={styles.logoView}>
-                    <View style={styles.logoSubView}>
-                        <TouchableOpacity onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}>
-                            <Image
-                                source={icon.google}
-                                style={styles.logo}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image
-                                source={icon.github}
-                                style={styles.logo}
-                            />
-                        </TouchableOpacity>
+                    <View style={styles.logoView}>
+                        <View style={styles.logoSubView}>
+                            <TouchableOpacity onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}>
+                                <Image
+                                    source={icon.google}
+                                    style={styles.logo}
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                                <Image
+                                    source={icon.github}
+                                    style={styles.logo}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-                <View style={styles.txtMainView}>
-                    <View style={styles.txtView}>
-                        <Text>Don't have an account? </Text>
-                        <Text style={styles.txtColor} onPress={handleNav}>Sign Up</Text>
+                    <View style={styles.txtMainView}>
+                        <View style={styles.txtView}>
+                            <Text>Don't have an account? </Text>
+                            <Text style={styles.txtColor} onPress={handleNav}>Sign Up</Text>
+                        </View>
                     </View>
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }

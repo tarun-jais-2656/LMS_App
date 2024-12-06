@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { icon } from "../../../assets/icons";
 import ProgrammingCourses from "../../../components/programmingCourses";
 import courses from "/Users/ai/Desktop/Projects/LMS/src/jsons/dummy5Courses.json"
@@ -124,15 +124,15 @@ export function Home() {
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('MyCart')}>
                     { count >0 ?
-                    <>
-                    <View style={styles.cnt}>
-                        <Text style={styles.cntTxt}>{count}</Text>
-                    </View>
+                    <View style={{position:'relative'}}>
                     <Image
                         source={icon.bag}
                         style={styles.bag}
                     />
-                    </>:
+                    <View style={styles.cnt}>
+                        <Text style={styles.cntTxt}>{count}</Text>
+                    </View>
+                    </View>:
                     <Image
                         source={icon.bag}
                         style={styles.bag}

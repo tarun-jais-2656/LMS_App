@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     profileTxt: { fontSize: 14, fontWeight: '450', marginBottom: 10 },
     profileTxt2: { fontSize: 16, fontWeight: '500', color: '#51a6f5' },
     inputView: { flex: 0.8, justifyContent: 'space-between' },
-    name: { borderWidth: 1,  borderRadius: 12, borderColor: 'lightgrey', padding: 15, fontSize: 16, marginTop: 10, backgroundColor: '#FFFFFF' },
+    name: { borderWidth: 1,  borderRadius: 12, borderColor: 'lightgrey', padding: 15, fontSize: 16, backgroundColor: '#FFFFFF' },
     username: { borderWidth: 1, borderRadius: 12, borderColor: 'lightgrey', padding: 15, fontSize: 16, backgroundColor: '#FFFFFF' },
     calView: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 15, alignItems: 'center', borderWidth: 1, borderRadius: 12, borderColor: 'lightgrey', backgroundColor: '#FFFFFF' },
     birth: { fontSize: 18 },

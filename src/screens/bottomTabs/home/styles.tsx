@@ -23,16 +23,17 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     bag: {
-        height: 35,
-        width: 35,
+        height: 45,
+        width: 45,
     },
     cnt:{
         position:'absolute',
-        backgroundColor:'#6b31a8',
-        marginTop:-18,
+        backgroundColor:'#407be3',
+        marginTop:7,
         height:25,
         width:25,
         borderRadius:20,
+        
     },
     cntTxt:{
         color:'white',
