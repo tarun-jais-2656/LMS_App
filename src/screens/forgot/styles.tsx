@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     },
     textInput: {
         marginHorizontal: 15,
+        color:'#000000'
     },
     txtMainView:{
         alignItems:'center'

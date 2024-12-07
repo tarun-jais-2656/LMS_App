@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         marginHorizontal: 15,
+        color:'#000000'
     },
     background: {
         width: "100%",

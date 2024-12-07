@@ -5,16 +5,22 @@ import { icon } from "../../../assets/icons";
 import { useNavigation } from "@react-navigation/native";
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../../../redux/myCart/myCartSlice";
+import { clearPaidCourses } from "../../../redux/paidCourses/paidCoursesSlice";
 
 export const Profile = () => {
     const navigation = useNavigation()
     const name=AsyncStorage.getItem('name')
+    const dispatch=useDispatch();
 
     const onLogout = async () => {
         try {
             await auth().signOut();
             await AsyncStorage.removeItem('userUID');
             await AsyncStorage.removeItem('name');
+            dispatch(clearCart());
+            dispatch(clearPaidCourses());
             navigation.reset({index:0,routes:[{name:'Login'}]});
         } catch (error) {
             Alert.alert("Unable to Logout");

@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     },
     textInput: {
         marginHorizontal: 15,
+        color:"#000000"
     },
     emailView: {
         backgroundColor: '#FFFFFF',
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
         padding: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems:'center'
     },
     btn: {
         backgroundColor: '#51a6f5',

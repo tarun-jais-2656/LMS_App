@@ -35,7 +35,7 @@ const Splash = () => {
     }, []);
 
     useEffect(() => {
-        if (user !== undefined) {
+        // if (user !== undefined) {
             setTimeout(async() => {
                 const tut=await AsyncStorage.getItem('tut')
                 if (user) {
@@ -47,9 +47,9 @@ const Splash = () => {
                     navigation.reset({index:0,routes:[{name:'GetStarted'}]});
                 }
             }, 2000);
-        }
+        // }
         getUserUid();
-    }, [user]);
+    }, [user,navigation]);
 
     return (
         <View style={styles.container}>

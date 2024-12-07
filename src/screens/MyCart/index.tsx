@@ -9,6 +9,7 @@ import { icon } from "../../assets/icons";
 import { Header } from "../../components/header";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
+import { addToPaidCourses } from "../../redux/paidCourses/paidCoursesSlice";
 
 
 export default function MyCart() {
@@ -28,6 +29,7 @@ export default function MyCart() {
 
             if (userUID) {
                 for (const item of myCartCourses) {
+                    console.log("54t674t7t4787847858785=====",item)
                     await firestore()
                         .collection('users')
                         .doc(userUID)
@@ -38,12 +40,15 @@ export default function MyCart() {
                             title: item.title,
                             price: item.price,
                             image_480x270: item.image_480x270,
-                            visible_instructors: item.visible_instructors,
-                            visible_instructors_img: item.visible_instructors_img,
+                            visible_instructors: item.visible_instructors || item.visible_instructors[0].title,
+                            visible_instructors_img: item.visible_instructors_img || item.visible_instructors[0].image_100x100 ,
                             videoUrl: item.videoUrl,
                         });
                 }
 
+                myCartCourses.forEach(item => {
+                    dispatch(addToPaidCourses(item));
+                });
                 dispatch(clearCart());
                 setModalVisible(false);
 

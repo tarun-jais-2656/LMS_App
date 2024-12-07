@@ -8,11 +8,13 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         height: 40,
+        color:'#000000',
         borderColor: '#ccc',
         borderWidth: 1,
         marginBottom: 20,
         paddingLeft: 10,
         borderRadius: 8,
+        backgroundColor:'#fff'
     },
     categoryContainer: {
         flexDirection: 'row',
