@@ -37,9 +37,9 @@ export const CoursePlaylist = () => {
                     <Text style={styles.title}>{course.title}</Text>
                     <Text style={styles.instructor}>Your Instructor</Text>
                     <View style={styles.flx}>
-                        <Image source={{ uri: course.visible_instructors_img }} style={styles.profile} />
+                        <Image source={{ uri: course.visible_instructors_img || course.visible_instructors[0].image_100x100 }} style={styles.profile} />
                         <View style={{ width: width / 1.6 }}>
-                            <Text style={styles.colorTxt}>{course.visible_instructors.slice(0, 25)}...</Text>
+                            <Text style={styles.colorTxt}>{Array.isArray(course.visible_instructors) ? course.visible_instructors[0].title.slice(0,25) : course.visible_instructors.slice(0,25)}...</Text>
                             <Text style={styles.colorTxt}>4.7 Rating</Text>
                             <TouchableOpacity style={styles.btn} onPress={handleNavToChat}>
                                 <Text style={styles.txt}>Ask your doubt</Text>

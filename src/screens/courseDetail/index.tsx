@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import firestore from '@react-native-firebase/firestore';
 import { icon } from "../../assets/icons";
 import { Header } from "../../components/header";
-import { addCourseToCart } from "../../redux/myCart/myCartSlice";
+import { addCourseToCart, removeFromCart } from "../../redux/myCart/myCartSlice";
 import { addToPaidCourses } from "../../redux/paidCourses/paidCoursesSlice";
 import styles from "./styles";
 const { width, height } = Dimensions.get("window");
@@ -28,6 +28,27 @@ export default function CourseDetail() {
         setAddedToCart(courseInCart);
         setAddedToPaidCourse(courseInPaidCourse);
     }, [myCartCourses, myPaidCourses, course]);
+
+    const handleRemoveCourse = async (id) => {
+        const Id = String(id);
+        try {
+            const userUID = await AsyncStorage.getItem('userUID');
+
+            await firestore()
+                .collection('users')
+                .doc(userUID)
+                .collection('cart')
+                .doc(Id)
+                .delete();
+
+            dispatch(removeFromCart(id));
+
+        } catch (error) {
+            console.error('Error removing course:', error);
+            Alert.alert('Error', 'There was an issue removing the course from your cart.');
+        }
+    };
+
     const handlePress = async () => {
         try {
             const userUID = await AsyncStorage.getItem('userUID');
@@ -81,6 +102,7 @@ export default function CourseDetail() {
                 setModalVisible(false);
                 dispatch(addToPaidCourses(course));
                 setAddedToPaidCourse(!addedToPaidCourse);
+                handleRemoveCourse(course.id);
                 Alert.alert("Payment done successfully.");
             } else {
                 Alert.alert('User ID not found.');

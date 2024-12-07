@@ -40,7 +40,7 @@ export default function MyCart() {
                             title: item.title,
                             price: item.price,
                             image_480x270: item.image_480x270,
-                            visible_instructors: item.visible_instructors || item.visible_instructors[0].title,
+                            visible_instructors: Array.isArray(item.visible_instructors) ? item.visible_instructors[0].title : item.visible_instructors,
                             visible_instructors_img: item.visible_instructors_img || item.visible_instructors[0].image_100x100 ,
                             videoUrl: item.videoUrl,
                         });

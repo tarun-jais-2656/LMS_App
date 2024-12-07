@@ -13,8 +13,8 @@ export const ChatScreen = () => {
     const route = useRoute();
     const { course } = route.params;
     const navigation = useNavigation();
-    const chatImg = course.visible_instructors_img;
-    const chatName = course.visible_instructors;
+    const chatImg = course.visible_instructors_img || course.visible_instructors[0].image_100x100;
+    const chatName = Array.isArray(course.visible_instructors) ? course.visible_instructors[0].title : course.visible_instructors;
 
     const getUserUid = async () => {
         const uid = await AsyncStorage.getItem('userUID');
