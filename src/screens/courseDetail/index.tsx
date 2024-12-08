@@ -10,6 +10,7 @@ import { Header } from "../../components/header";
 import { addCourseToCart, removeFromCart } from "../../redux/myCart/myCartSlice";
 import { addToPaidCourses } from "../../redux/paidCourses/paidCoursesSlice";
 import styles from "./styles";
+import RazorpayCheckout from 'react-native-razorpay';
 const { width, height } = Dimensions.get("window");
 
 export default function CourseDetail() {
@@ -103,15 +104,44 @@ export default function CourseDetail() {
                 dispatch(addToPaidCourses(course));
                 setAddedToPaidCourse(!addedToPaidCourse);
                 handleRemoveCourse(course.id);
-                Alert.alert("Payment done successfully.");
+                // Alert.alert("Payment done successfully.");
             } else {
-                Alert.alert('User ID not found.');
+                // Alert.alert('User ID not found.');
             }
         } catch (error) {
             console.error('Error adding paidCourse:', error);
-            Alert.alert('Error adding paidCourse.');
+            // Alert.alert('Error adding paidCourse.');
         }
     };
+
+    const total=course.price;
+    const handleRaz = () => {
+        var options = {
+            description: 'Credits towards consultation',
+            image: 'https://i.imgur.com/3g7nmJC.jpg',
+            currency: 'INR',
+            key: 'rzp_test_GnpMgYfbVsmYuV',
+            amount: total*100*83,
+            name: 'Appinventiv',
+            order_id: '',//Replace this with an order_id created using Orders API.
+            prefill: {
+                email: 'tarun.jais@gmail.com',
+                contact: '9191919191',
+                name: 'Tarun Jaiswal'
+            },
+            theme: { color: '#53a20e' }
+        }
+        RazorpayCheckout.open(options).then((data) => {
+            // handle success
+            handlePayment();
+            Alert.alert(`Success: ${data.razorpay_payment_id}`);
+        }).catch((error) => {
+            // handle failure
+            Alert.alert(`Error: ${error.code} | ${error.description}`);
+        });
+    }
+
+
     const handleNav = () => {
         navigation.reset({
             index: 0,
@@ -140,7 +170,7 @@ export default function CourseDetail() {
                             </View>
                             {!addedToPaidCourse ?
                                 <View>
-                                    <TouchableOpacity style={styles.buyBtn} onPress={() => setModalVisible(!isModalVisible)}>
+                                    <TouchableOpacity style={styles.buyBtn} onPress={handleRaz}>
                                         <Text style={styles.buyTxt}>
                                             {addedToPaidCourse ? 'Enrolled' : 'Buy now'}
                                         </Text>

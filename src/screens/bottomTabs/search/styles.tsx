@@ -7,14 +7,15 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
     },
     searchInput: {
-        height: 40,
+        // height: 40,
         color:'#000000',
         borderColor: '#ccc',
         borderWidth: 1,
         marginBottom: 20,
         paddingLeft: 10,
         borderRadius: 8,
-        backgroundColor:'#fff'
+        backgroundColor:'#fff',
+        paddingVertical:16,
     },
     categoryContainer: {
         flexDirection: 'row',
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     selectedCategory: {
-        backgroundColor: '#007BFF',
+        backgroundColor: '#51a6f5',
     },
     categoryText: {
         fontSize: 14,

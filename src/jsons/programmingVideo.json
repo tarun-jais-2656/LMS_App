@@ -2,7 +2,7 @@
     "videos": [
         {
             "id": "1565838",
-            "url": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_30mb.mp4",
+            "url": "https://videodelivery.net/5d5bc37ffcf54c9b82e996823bffbb81/thumbnails/thumbnail.mp4?width=600&time=10s",
             "price": 99,
             "cat":"programming"
         },
@@ -14,13 +14,13 @@
         },
         {
             "id": "851712",
-            "url": "https://example.com/video/12347",
+            "url": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_30mb.mp4",
             "price": 65,
             "cat":"coreSkills"
         },
         {
             "id": "756150",
-            "url": "https://example.com/video/12348",
+            "url": "",
             "price": 70,
             "cat":"development"
         },

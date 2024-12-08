@@ -1,6 +1,7 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
     cont: {
         flex: 1
@@ -8,6 +9,7 @@ const styles = StyleSheet.create({
     flexRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems:'center'
     },
     head: {
         flexDirection: 'row',
@@ -17,8 +19,9 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     userr: {
-        height: 37,
-        width: 37,
+        height: 50,
+        width: 50,
+        borderRadius:40,
         marginRight: 10,
         alignSelf: 'center'
     },
@@ -67,7 +70,8 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         marginHorizontal: 15,
-        color:'#000000'
+        // backgroundColor:'red',
+        width:0.8*width,
     },
     background: {
         width: "100%",

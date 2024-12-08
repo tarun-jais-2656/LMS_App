@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     safeArea: { flex: 1},
-    container: { flex: 1, marginTop: 10, marginHorizontal: 16, },
+    container: { flex: 1, marginTop: 20, marginHorizontal: 16, },
     subcontainer: { flexDirection: 'row', justifyContent: 'space-between' },
     backView: { backgroundColor: '#DFE0E0', borderRadius: 10, height: 48, width: 48, justifyContent: 'center', alignItems: 'center' },
     back: { height: 12, width: 6 },
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     emailView: {   borderWidth: 1, borderRadius: 12, borderColor: 'lightgrey', backgroundColor: '#FFFFFF' },
     email: { fontSize: 16, },
     verify: { color: '#EE28A9' },
-    updateButton: { marginBottom: 20, padding: 20, backgroundColor: '#51a6f5', alignItems: 'center', justifyContent: 'center', borderRadius: 12, },
+    updateButton: { marginBottom: 20, padding: 16, backgroundColor: '#51a6f5', alignItems: 'center', justifyContent: 'center', borderRadius: 12, },
     updateButtonTxt: { color: 'white', fontWeight: '700', fontSize: 16 },
     modalHeading: { borderBottomWidth: 0.3, paddingBottom: 20 },
     modalHeadingTxt: { fontSize: 24, fontWeight: '700' },

@@ -31,6 +31,7 @@ const bannerData1 = [
 export function Home() {
     const navigation = useNavigation();
     const inputRef = useRef(null);
+    const [pic,setPic]=useState(null);
 
     const CourseItem = ({ name, img, price }) => (
         <View style={styles.item}>
@@ -101,9 +102,26 @@ export function Home() {
         }
     };
 
+    const loadProfilePic = async () => {
+        try {
+            const storedPic = await AsyncStorage.getItem('userProfilePic');
+            if (storedPic) {
+                setPic(storedPic);
+            } else {
+                setPic(null);
+            }
+        } catch (error) {
+            console.error('Error loading profile picture from AsyncStorage:', error);
+        }
+    };
+
+
+
+
     useEffect(() => {
         fetchCartData();
         fetchPaidCourses();
+        // loadProfilePic();
     }, []);
 
 
@@ -113,7 +131,7 @@ export function Home() {
                 <View style={styles.flexRow}>
                     <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
                         <Image
-                            source={icon.userr}
+                            source={pic!==null ? { uri: pic } : icon.userr}
                             style={styles.userr}
                         />
                     </TouchableOpacity>
@@ -123,20 +141,20 @@ export function Home() {
                     </View>
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('MyCart')}>
-                    { count >0 ?
-                    <View style={{position:'relative'}}>
-                    <Image
-                        source={icon.bag}
-                        style={styles.bag}
-                    />
-                    <View style={styles.cnt}>
-                        <Text style={styles.cntTxt}>{count}</Text>
-                    </View>
-                    </View>:
-                    <Image
-                        source={icon.bag}
-                        style={styles.bag}
-                    />
+                    {count > 0 ?
+                        <View style={{ position: 'relative' }}>
+                            <Image
+                                source={icon.bag}
+                                style={styles.bag}
+                            />
+                            <View style={styles.cnt}>
+                                <Text style={styles.cntTxt}>{count}</Text>
+                            </View>
+                        </View> :
+                        <Image
+                            source={icon.bag}
+                            style={styles.bag}
+                        />
                     }
                 </TouchableOpacity>
             </View>
@@ -147,6 +165,7 @@ export function Home() {
                 />
                 <TextInput
                     placeholder="Search"
+                    placeholderTextColor={"#ccc"}
                     style={styles.searchInput}
                     numberOfLines={1}
                     onFocus={handleNav}

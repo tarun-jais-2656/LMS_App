@@ -14,7 +14,7 @@ export const CoursePlaylist = () => {
     const navigation = useNavigation();
 
     const handlenav = () => {
-        navigation.navigate('VideoPlayer')
+        navigation.navigate('VideoPlayer',{course})
     }
     const handleNav = () => {
         navigation.reset({

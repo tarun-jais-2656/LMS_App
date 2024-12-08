@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { Alert, Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import { icon } from "../../../assets/icons";
@@ -13,6 +13,24 @@ export const Profile = () => {
     const navigation = useNavigation()
     const name=AsyncStorage.getItem('name')
     const dispatch=useDispatch();
+    const[ pic,setPic]=useState();
+
+    useEffect(() => {
+        const loadProfilePic = async () => {
+          try {
+            const storedPic = await AsyncStorage.getItem('userProfilePic');
+            if (storedPic) {
+              setPic(storedPic);  
+            } else {
+              setPic(null); 
+            }
+          } catch (error) {
+            console.error('Error loading profile picture from AsyncStorage:', error);
+          }
+        };
+    
+        loadProfilePic();
+      }, []);
 
     const onLogout = async () => {
         try {
@@ -29,7 +47,7 @@ export const Profile = () => {
     return (
         <SafeAreaView style={styles.safe}>
             <View style={styles.profileView}>
-                <Image source={icon.profile}
+                <Image source={pic ? { uri: pic } : icon.profile}
                     style={styles.profileImg}
                 />
                 <View style={styles.txtView}>

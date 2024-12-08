@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native";
 
 const styles=StyleSheet.create({
     safe:{ marginHorizontal: 24, },
-    profileView:{ marginTop: 32, flexDirection: 'row', backgroundColor: 'white', padding: 20, borderRadius: 8 },
-    profileImg:{ height: 40, width: 40 },
+    profileView:{ marginTop: 32, flexDirection: 'row', backgroundColor: 'white', padding: 10, borderRadius: 8 },
+    profileImg:{ height: 70, width: 70,borderRadius:50, },
     txtView:{ alignSelf: 'center', marginLeft: 12 },
     txt1:{ fontSize: 18, fontWeight: '700' },
     txt2:{ fontSize: 14, fontWeight: '600', color: '#2A7BBB' },

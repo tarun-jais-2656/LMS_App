@@ -58,6 +58,7 @@ export function Search() {
             <TextInput
                 style={styles.searchInput}
                 placeholder="Search by course title"
+                placeholderTextColor={"#ccc"}
                 value={query}
                 onChangeText={setQuery}
             />

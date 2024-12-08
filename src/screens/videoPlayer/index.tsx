@@ -3,18 +3,22 @@ import { SafeAreaView, Dimensions, StyleSheet, View, TouchableOpacity, Image, Te
 import Video from "react-native-video";
 import { icon } from "../../assets/icons";
 import Slider from '@react-native-community/slider';
-import Orientation from 'react-native-orientation-locker';
 import { Header } from "../../components/header";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import Orientation from 'react-native-orientation-locker';
 
-const { width, height } = Dimensions.get("window"); // Get screen dimensions
+const { width, height } = Dimensions.get("window");
 
 export default function VideoPlayer() {
   const [clicked, setClicked] = useState(false);
-  const [paused, setPaused] = useState(true); 
+  const [paused, setPaused] = useState(true);
   const [progress, setProgress] = useState({ currentTime: 0, seekableDuration: 0 });
   const [fullScreen, setFullScreen] = useState(false);
   const ref = useRef();
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { course } = route.params;
+  console.log(course)
 
   // Format the time to MM:SS
   const format = seconds => {
@@ -27,12 +31,12 @@ export default function VideoPlayer() {
 
   // Handle fullscreen toggle
   const handleFullscreenToggle = () => {
+    setFullScreen(!fullScreen);
     if (fullScreen) {
       Orientation.lockToPortrait();
     } else {
       Orientation.lockToLandscape();
     }
-    setFullScreen(!fullScreen);
   };
 
   // Update progress when video plays
@@ -44,96 +48,83 @@ export default function VideoPlayer() {
   };
 
   // Seek video
-//   const handleSeek = value => {
-//     ref.current.seek(value);
-//   };
-const navigation=useNavigation();
-const handleNav = () => {
-  navigation.reset({
+  // const handleSeek = value => {
+  //   ref.current.seek(value);
+  // };
+
+  const handleNav = () => {
+    navigation.reset({
       index: 0,
-      routes: [{ name: 'CoursePlaylist', params: { screen: 'course' } }]
-  });
-
-};
-
+      routes: [{ name: 'CoursePlaylist', params: {course } }]
+    });
+  };
 
   return (
-    <View>
-      <Header title={"VideoPlayer"}/>
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={{ width: width, height: fullScreen ? '100%' : height / 3 }}
-        onPress={() => setClicked(!clicked)}
-      >
-        <Video
-          source={{ uri: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_30mb.mp4' }}
-          style={styles.video}
-          resizeMode="contain"
-          paused={paused}
-          ref={ref}
-          onProgress={handleProgress}
-          onEnd={() => setPaused(true)}
-        />
+    <View style={{ flex: 1 }}>
+      <Header title="Video Player" onpress={handleNav}/>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.videoContainer}>
+          <TouchableOpacity
+            // style={{  height: fullScreen ? '100%' : height / 3 }}
+            onPress={() => setClicked(!clicked)}
+          >
+            <Video
+              source={{ uri: course.videoUrl }}
+              style={styles.video}
+              resizeMode="contain"
+              paused={paused}
+              ref={ref}
+              onProgress={handleProgress}
+              onEnd={() => setPaused(true)}
+              fullscreen={fullScreen} // Control fullscreen state
+              onFullscreenPlayerWillPresent={() => setFullScreen(true)} // Listen for fullscreen event
+              onFullscreenPlayerWillDismiss={() => setFullScreen(false)} // Handle fullscreen exit
+            />
 
-        {clicked && (
-          <TouchableOpacity style={styles.overlay}>
-            <View style={styles.controlButtons}>
-              <TouchableOpacity
-                onPress={() => ref.current.seek(progress.currentTime - 10)}
-              >
-                <Image
-                  source={icon.backward}
-                  style={styles.controlIcon}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setPaused(!paused)}
-              >
-                <Image
-                  source={paused ? icon.playbutton : icon.pause}
-                  style={[styles.controlIcon, { marginLeft: 50 }]}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => ref.current.seek(progress.currentTime + 10)}
-              >
-                <Image
-                  source={icon.forward}
-                  style={[styles.controlIcon, { marginLeft: 50 }]}
-                />
-              </TouchableOpacity>
-            </View>
+            {clicked && (
+              <View style={styles.overlay}>
+                <View style={styles.controlButtons}>
+                  <TouchableOpacity onPress={() => ref.current.seek(progress.currentTime - 10)}>
+                    <Image source={icon.backward} style={styles.controlIcon} />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setPaused(!paused)}>
+                    <Image
+                      source={paused ? icon.playbutton : icon.pause}
+                      style={[styles.controlIcon, { marginLeft: 50 }]}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => ref.current.seek(progress.currentTime + 10)}>
+                    <Image source={icon.forward} style={[styles.controlIcon, { marginLeft: 50 }]} />
+                  </TouchableOpacity>
+                </View>
 
-            <View style={styles.sliderContainer}>
-              <Text style={{ color: 'white' }}>
-                {format(progress.currentTime)}
-              </Text>
-              <Slider
-                style={styles.slider}
-                minimumValue={0}
-                maximumValue={progress.seekableDuration || 0}
-                minimumTrackTintColor="#FFFFFF"
-                maximumTrackTintColor="#fff"
-                value={progress.currentTime}
-                // onValueChange={handleSeek}
-              />
-              <Text style={{ color: 'white' }}>
-                {format(progress.seekableDuration)}
-              </Text>
-            </View>
+                <View style={styles.sliderContainer}>
+                  <Text style={{ color: 'white' }}>{format(progress.currentTime)}</Text>
+                  <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={progress.seekableDuration || 0}
+                    minimumTrackTintColor="#FFFFFF"
+                    maximumTrackTintColor="#fff"
+                    value={progress.currentTime}
+                  // onValueChange={handleSeek}
+                  />
+                  <Text style={{ color: 'white' }}>{format(progress.seekableDuration)}</Text>
+                </View>
 
-            <View style={styles.fullscreenButtonContainer}>
-              <TouchableOpacity onPress={handleFullscreenToggle}>
-                <Image
-                  source={fullScreen ? icon.minimize : icon.fullsize}
-                  style={styles.fullscreenIcon}
-                />
-              </TouchableOpacity>
-            </View>
+                <View style={styles.fullscreenButtonContainer}>
+                  <TouchableOpacity onPress={handleFullscreenToggle}>
+                    <Image
+                      source={fullScreen ? icon.minimize : icon.fullsize}
+                      style={styles.fullscreenIcon}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           </TouchableOpacity>
-        )}
-      </TouchableOpacity>
-    </View>
+        </View>
+      </SafeAreaView>
     </View>
   );
 }
@@ -142,21 +133,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  videoContainer: {
+    flex: 1,
+  },
   video: {
-    width: width,
+    width: "100%",
     height: height / 3,
   },
   overlay: {
-    height: height / 3.82,
-    width: width,
-    marginTop: 33,
+    height: '100%',
+    width: '100%',
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   controlButtons: {
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   controlIcon: {
     width: 30,
@@ -168,7 +162,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     position: 'absolute',
-    bottom: 0,
+    bottom: 40,
     paddingLeft: 20,
     paddingRight: 20,
     alignItems: 'center',
@@ -193,3 +187,4 @@ const styles = StyleSheet.create({
     tintColor: 'white',
   },
 });
+

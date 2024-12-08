@@ -10,10 +10,11 @@ import { Header } from "../../components/header";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import { addToPaidCourses } from "../../redux/paidCourses/paidCoursesSlice";
+import RazorpayCheckout from 'react-native-razorpay';
 
 
 export default function MyCart() {
-    const navigation=useNavigation();
+    const navigation = useNavigation();
     const [isModalVisible, setModalVisible] = useState(false);
     const dispatch = useDispatch();
 
@@ -29,7 +30,7 @@ export default function MyCart() {
 
             if (userUID) {
                 for (const item of myCartCourses) {
-                    console.log("54t674t7t4787847858785=====",item)
+                    console.log("54t674t7t4787847858785=====", item)
                     await firestore()
                         .collection('users')
                         .doc(userUID)
@@ -41,7 +42,7 @@ export default function MyCart() {
                             price: item.price,
                             image_480x270: item.image_480x270,
                             visible_instructors: Array.isArray(item.visible_instructors) ? item.visible_instructors[0].title : item.visible_instructors,
-                            visible_instructors_img: item.visible_instructors_img || item.visible_instructors[0].image_100x100 ,
+                            visible_instructors_img: item.visible_instructors_img || item.visible_instructors[0].image_100x100,
                             videoUrl: item.videoUrl,
                         });
                 }
@@ -63,16 +64,42 @@ export default function MyCart() {
                         }
                     });
 
-                Alert.alert("Payment done successfully.");
+                // Alert.alert("Payment done successfully.");
 
             } else {
-                Alert.alert('User ID not found.');
+                // Alert.alert('User ID not found.');
             }
         } catch (error) {
             console.error('Error adding paidCourse:', error);
-            Alert.alert('Error adding paidCourse.');
+            // Alert.alert('Error adding paidCourse.');
         }
     };
+
+    const handleRaz = () => {
+        var options = {
+            description: 'Credits towards consultation',
+            image: 'https://i.imgur.com/3g7nmJC.jpg',
+            currency: 'INR',
+            key: 'rzp_test_GnpMgYfbVsmYuV',
+            amount: total*100*83,
+            name: 'Appinventiv',
+            order_id: '',//Replace this with an order_id created using Orders API.
+            prefill: {
+                email: 'tarun.jais@gmail.com',
+                contact: '9191919191',
+                name: 'Tarun Jaiswal'
+            },
+            theme: { color: '#53a20e' }
+        }
+        RazorpayCheckout.open(options).then((data) => {
+            // handle success
+            handlePayment();
+            Alert.alert(`Success: ${data.razorpay_payment_id}`);
+        }).catch((error) => {
+            // handle failure
+            Alert.alert(`Error: ${error.code} | ${error.description}`);
+        });
+    }
 
     const handleRemoveCourse = async (id) => {
         const Id = String(id);
@@ -126,36 +153,36 @@ export default function MyCart() {
 
     return (
         <View style={styles.container1}>
-        <Header title={"MyCart"} onpress={handleNav}/>
-        <View style={styles.container}>
-            {myCartCourses.length > 0 ?
-                <View style={styles.flat}>
-                    <FlatList
-                        data={myCartCourses}
-                        renderItem={renderCourse}
-                        keyExtractor={(item) => item.id.toString()}
-                        showsVerticalScrollIndicator={false}
-                    />
-                    <View style={styles.txtView}>
-                        <Text style={styles.txt2}>Total Price: ${total}</Text>
-                        <TouchableOpacity style={styles.btn} onPress={() => setModalVisible(!isModalVisible)}>
-                            <Text style={styles.txtBtn}>Go For Payment</Text>
-                        </TouchableOpacity>
+            <Header title={"MyCart"} onpress={handleNav} />
+            <View style={styles.container}>
+                {myCartCourses.length > 0 ?
+                    <View style={styles.flat}>
+                        <FlatList
+                            data={myCartCourses}
+                            renderItem={renderCourse}
+                            keyExtractor={(item) => item.id.toString()}
+                            showsVerticalScrollIndicator={false}
+                        />
+                        <View style={styles.txtView}>
+                            <Text style={styles.txt2}>Total Price: ${total}</Text>
+                            <TouchableOpacity style={styles.btn} onPress={handleRaz}>
+                                <Text style={styles.txtBtn}>Go For Payment</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-                : <View style={styles.empty}>
-                    <Image source={icon.emptyCart} style={styles.emptyCart}/>
-                    <Text style={styles.txtCart}>Your cart is empty!</Text>
-                </View>
-            }
+                    : <View style={styles.empty}>
+                        <Image source={icon.emptyCart} style={styles.emptyCart} />
+                        <Text style={styles.txtCart}>Your cart is empty!</Text>
+                    </View>
+                }
 
-            <Modalpay
-                isModalVisible={isModalVisible}
-                onBackdropPress={onBackdropPress}
-                total={total}
-                handlePayment={handlePayment}
-            />
-        </View>
+                <Modalpay
+                    isModalVisible={isModalVisible}
+                    onBackdropPress={onBackdropPress}
+                    total={total}
+                    handlePayment={handlePayment}
+                />
+            </View>
         </View>
     );
 }

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, SafeAreaView, TouchableOpacity, TextInput, FlatList, } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { icon } from "../../assets/icons";
 import Modal from "react-native-modal";
 import styles from "./styles";
+import { Header } from "../../components/header";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const EditProfile = ({ navigation }) => {
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -15,33 +17,40 @@ const EditProfile = ({ navigation }) => {
     const [genders] = useState(['Male', 'Female', 'Other']);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const launchGallery = async () => {
-        launchImageLibrary({ mediaType: 'photo' }, result => {
+    const launchGallery = async() => {
+        launchImageLibrary({ mediaType: 'photo' },  result => {
             if (result.didCancel) {
                 console.log('User cancelled image picker');
             } else if (result.error) {
                 console.log('ImagePicker Error: ', result.error);
             } else {
-                setPic(result.assets[0].uri);
-                setIsModalVisible(!isModalVisible);
+                const imageUri = result.assets[0].uri;
+                setPic(imageUri);
+                setIsModalVisible(!isModalVisible); 
             }
         });
     };
+    
 
-    const launchCam = async () => {
-        launchCamera({ mediaType: 'photo' }, result => {
+    const launchCam = async() => {
+        launchCamera({ mediaType: 'photo' },result => {
             if (result.didCancel) {
                 console.log('User cancelled image picker');
             } else if (result.error) {
                 console.log('ImagePicker Error: ', result.error);
             } else {
-                setPic(result.assets[0].uri);
-                setIsModalVisible(!isModalVisible);
+                const imageUri = result.assets[0].uri;
+                setPic(imageUri); 
+                setIsModalVisible(!isModalVisible);  // Toggle modal visibility
             }
         });
     };
 
-    const handleNavBack = () => {
+    const saveImg=async()=>{
+        await AsyncStorage.setItem('userProfilePic', pic);
+    }
+
+    const onpress = () => {
         navigation.reset({
             index: 0,
             routes: [{ name: 'BottomTab', params: { screen: 'Profile' } }],
@@ -70,20 +79,29 @@ const EditProfile = ({ navigation }) => {
         }
     };
 
+    useEffect(() => {
+        const loadProfilePic = async () => {
+          try {
+            const storedPic = await AsyncStorage.getItem('userProfilePic');
+            if (storedPic) {
+              setPic(storedPic);  
+            } else {
+              setPic(null); 
+            }
+          } catch (error) {
+            console.error('Error loading profile picture from AsyncStorage:', error);
+          }
+        };
+    
+        loadProfilePic();
+      }, []);
+
+
     return (
+        <View style={{flex:1}}>
+        <Header title={"Edit Profile"} onpress={onpress}/>
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
-                <View style={styles.subcontainer}>
-                    <TouchableOpacity onPress={handleNavBack}>
-                        <View style={styles.backView}>
-                            <Image source={icon.back1} style={styles.back} />
-                        </View>
-                    </TouchableOpacity>
-                    <View style={styles.txtV}>
-                        <Text style={styles.txt1}>Edit Profile</Text>
-                    </View>
-                </View>
-
                 <View style={styles.profileView}>
                     <View style={styles.profileSub}>
                         <View style={styles.profileSub2}>
@@ -97,12 +115,13 @@ const EditProfile = ({ navigation }) => {
                 </View>
 
                 <View style={styles.inputView}>
-                    <TextInput style={styles.name} placeholder="Name" />
-                    <TextInput style={styles.username} placeholder="Username" />
+                    <TextInput style={styles.name} placeholder="Name" placeholderTextColor={"#ccc"} />
+                    <TextInput style={styles.username} placeholder="Username" placeholderTextColor={"#ccc"} />
 
                     <View style={styles.calView}>
                         <TextInput
                             placeholder="Birthday"
+                            placeholderTextColor={"#ccc"}
                             style={styles.birth}
                             value={selectedDate.toLocaleDateString()}
                             editable={false}
@@ -126,6 +145,7 @@ const EditProfile = ({ navigation }) => {
                     <View style={styles.genderView}>
                         <TextInput
                             placeholder="Gender"
+                            placeholderTextColor={"#ccc"}
                             style={styles.gender}
                             value={selectedGender}
                             editable={false}
@@ -136,10 +156,10 @@ const EditProfile = ({ navigation }) => {
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <TextInput style={styles.name} placeholder="Email" />
+                    <TextInput style={styles.name} placeholder="Email" placeholderTextColor={"#ccc"} />
 
                     <View style={styles.updateButton}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={saveImg}>
                             <Text style={styles.updateButtonTxt}>Update</Text>
                         </TouchableOpacity>
                     </View>
@@ -206,6 +226,7 @@ const EditProfile = ({ navigation }) => {
                 </View>
             </Modal>
         </SafeAreaView>
+        </View>
     );
 };
 

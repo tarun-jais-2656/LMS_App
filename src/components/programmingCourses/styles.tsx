@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
         width: width * 0.8,
         // aspectRatio: 1,
-        height: 335,
+        height: 345,
         padding: 10,
         elevation: 5, // Shadow for Android
         shadowColor: '#000', // Shadow for iOS
