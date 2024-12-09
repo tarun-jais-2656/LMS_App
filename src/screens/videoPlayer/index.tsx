@@ -6,8 +6,7 @@ import Slider from '@react-native-community/slider';
 import { Header } from "../../components/header";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Orientation from 'react-native-orientation-locker';
-
-const { width, height } = Dimensions.get("window");
+import styles from "./styles";
 
 export default function VideoPlayer() {
   const [clicked, setClicked] = useState(false);
@@ -18,7 +17,6 @@ export default function VideoPlayer() {
   const navigation = useNavigation();
   const route = useRoute();
   const { course } = route.params;
-  console.log(course)
 
   // Format the time to MM:SS
   const format = seconds => {
@@ -34,7 +32,8 @@ export default function VideoPlayer() {
     setFullScreen(!fullScreen);
     if (fullScreen) {
       Orientation.lockToPortrait();
-    } else {
+    }
+    else {
       Orientation.lockToLandscape();
     }
   };
@@ -55,13 +54,13 @@ export default function VideoPlayer() {
   const handleNav = () => {
     navigation.reset({
       index: 0,
-      routes: [{ name: 'CoursePlaylist', params: {course } }]
+      routes: [{ name: 'CoursePlaylist', params: { course } }]
     });
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <Header title="Video Player" onpress={handleNav}/>
+      <Header title="Video Player" onpress={handleNav} />
       <SafeAreaView style={styles.container}>
         <View style={styles.videoContainer}>
           <TouchableOpacity
@@ -76,9 +75,9 @@ export default function VideoPlayer() {
               ref={ref}
               onProgress={handleProgress}
               onEnd={() => setPaused(true)}
-              fullscreen={fullScreen} // Control fullscreen state
+              fullscreen={fullScreen}
               onFullscreenPlayerWillPresent={() => setFullScreen(true)} // Listen for fullscreen event
-              onFullscreenPlayerWillDismiss={() => setFullScreen(false)} // Handle fullscreen exit
+              onFullscreenPlayerWillDismiss={() => {setFullScreen(false); Orientation.lockToPortrait()}} // Handle fullscreen exit
             />
 
             {clicked && (
@@ -128,63 +127,4 @@ export default function VideoPlayer() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  videoContainer: {
-    flex: 1,
-  },
-  video: {
-    width: "100%",
-    height: height / 3,
-  },
-  overlay: {
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  controlButtons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  controlIcon: {
-    width: 30,
-    height: 30,
-    tintColor: 'white',
-  },
-  sliderContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    bottom: 40,
-    paddingLeft: 20,
-    paddingRight: 20,
-    alignItems: 'center',
-  },
-  slider: {
-    width: '80%',
-    height: 40,
-  },
-  fullscreenButtonContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    top: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
-    alignItems: 'center',
-  },
-  fullscreenIcon: {
-    width: 24,
-    height: 24,
-    tintColor: 'white',
-  },
-});
 

@@ -6,7 +6,6 @@ import styles from "./styles";
 
 
 export const Slider=({bannerData,time})=>{
-
     const navigation=useNavigation()
     const handleNav=()=>{
         navigation.navigate('Search');

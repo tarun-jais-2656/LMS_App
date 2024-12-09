@@ -27,7 +27,6 @@ export default function MyCart() {
     const handlePayment = async () => {
         try {
             const userUID = await AsyncStorage.getItem('userUID');
-
             if (userUID) {
                 for (const item of myCartCourses) {
                     console.log("54t674t7t4787847858785=====", item)
@@ -46,13 +45,11 @@ export default function MyCart() {
                             videoUrl: item.videoUrl,
                         });
                 }
-
                 myCartCourses.forEach(item => {
                     dispatch(addToPaidCourses(item));
                 });
                 dispatch(clearCart());
                 setModalVisible(false);
-
                 await firestore()
                     .collection('users')
                     .doc(userUID)
@@ -63,7 +60,6 @@ export default function MyCart() {
                             querySnapshot.forEach(doc => doc.ref.delete());
                         }
                     });
-
                 // Alert.alert("Payment done successfully.");
 
             } else {
@@ -71,7 +67,6 @@ export default function MyCart() {
             }
         } catch (error) {
             console.error('Error adding paidCourse:', error);
-            // Alert.alert('Error adding paidCourse.');
         }
     };
 
@@ -83,7 +78,7 @@ export default function MyCart() {
             key: 'rzp_test_GnpMgYfbVsmYuV',
             amount: total*100*83,
             name: 'Appinventiv',
-            order_id: '',//Replace this with an order_id created using Orders API.
+            order_id: '',
             prefill: {
                 email: 'tarun.jais@gmail.com',
                 contact: '9191919191',
@@ -92,11 +87,9 @@ export default function MyCart() {
             theme: { color: '#53a20e' }
         }
         RazorpayCheckout.open(options).then((data) => {
-            // handle success
             handlePayment();
             Alert.alert(`Success: ${data.razorpay_payment_id}`);
         }).catch((error) => {
-            // handle failure
             Alert.alert(`Error: ${error.code} | ${error.description}`);
         });
     }
@@ -105,16 +98,13 @@ export default function MyCart() {
         const Id = String(id);
         try {
             const userUID = await AsyncStorage.getItem('userUID');
-
             await firestore()
                 .collection('users')
                 .doc(userUID)
                 .collection('cart')
                 .doc(Id)
                 .delete();
-
             dispatch(removeFromCart(id));
-
         } catch (error) {
             console.error('Error removing course:', error);
             Alert.alert('Error', 'There was an issue removing the course from your cart.');
@@ -175,7 +165,6 @@ export default function MyCart() {
                         <Text style={styles.txtCart}>Your cart is empty!</Text>
                     </View>
                 }
-
                 <Modalpay
                     isModalVisible={isModalVisible}
                     onBackdropPress={onBackdropPress}

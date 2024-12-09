@@ -6,7 +6,6 @@ import { Header } from "../../components/header";
 import styles from "./styles";
 const { width } = Dimensions.get('window');
 
-
 export const CoursePlaylist = () => {
     const route = useRoute();
     const { course } = route.params;
@@ -16,6 +15,7 @@ export const CoursePlaylist = () => {
     const handlenav = () => {
         navigation.navigate('VideoPlayer',{course})
     }
+
     const handleNav = () => {
         navigation.reset({
             index: 0,
@@ -23,7 +23,6 @@ export const CoursePlaylist = () => {
         });
 
     };
-
 
     const handleNavToChat = () => {
         navigation.navigate('ChatScreen', { course })

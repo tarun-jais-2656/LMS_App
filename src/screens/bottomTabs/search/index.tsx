@@ -11,6 +11,7 @@ export function Search() {
     const allCourses = useSelector(state => state.course);
     const [filteredCourses, setFilteredCourses] = useState([]);
     const tag = ['Programming', 'FrontEnd', 'BackEnd', 'LatestTech', 'CoreSkills', 'Development']
+
     const handleNav = (course) => {
         navigation.navigate('CourseDetail', { course });
     };

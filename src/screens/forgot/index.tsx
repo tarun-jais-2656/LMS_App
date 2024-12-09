@@ -11,6 +11,7 @@ export default function Forgot() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [errormsg, setErrormsg] = useState('');
+
     const handleNav = () => {
         navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
     }
@@ -40,8 +41,6 @@ export default function Forgot() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
-
-
 
     return (
         <View style={styles.flx}>

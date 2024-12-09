@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
     },
     textInput: {
         marginHorizontal: 15,
-        color:'#000000'
+        color:'#000000',
+        width:'85%'
     },
     emailView: {
         backgroundColor: '#FFFFFF',

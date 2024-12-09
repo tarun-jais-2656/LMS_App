@@ -56,6 +56,5 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#fff'
     },
-
 })
 export default styles;

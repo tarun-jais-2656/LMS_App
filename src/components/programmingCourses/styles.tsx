@@ -11,18 +11,16 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         marginLeft: 16,
         marginTop: 10,
-        // marginBottom: 10
     },
     card: {
         backgroundColor: 'white',
         borderRadius: 8,
         marginHorizontal: 8,
         width: width * 0.8,
-        // aspectRatio: 1,
-        height: 345,
+        height: 350,
         padding: 10,
-        elevation: 5, // Shadow for Android
-        shadowColor: '#000', // Shadow for iOS
+        elevation: 5,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,

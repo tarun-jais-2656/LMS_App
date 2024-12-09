@@ -29,12 +29,15 @@ const Login = () => {
 
         return auth().signInWithCredential(googleCredential);
     }
+
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
     const [emailValid, setEmailValid] = useState(true);
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
     const [secure, setSecure] = useState(false);
+    const [isLogin, setIsLogin] = useState('flase');
     const navigation = useNavigation();
+
     const handleNav = () => {
         navigation.navigate('SignUp');
 
@@ -50,6 +53,7 @@ const Login = () => {
             await AsyncStorage.setItem('userUID', userUid);
             const name = email.replace('@gmail.com', '')
             await AsyncStorage.setItem('name', name);
+            await AsyncStorage.setItem('isLogin',isLogin);
             Alert.alert('Login successfully!');
             navigation.reset({ index: 0, routes: [{ name: 'BottomTab' }] });
         } catch (error) {
@@ -81,8 +85,6 @@ const Login = () => {
         setSecure(!secure);
     }
 
-
-
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView
@@ -108,6 +110,7 @@ const Login = () => {
                             placeholderTextColor={"grey"}
                             style={styles.textInput}
                             value={email}
+                            numberOfLines={1}
                             onChangeText={value => setEmail(value)}
                             onBlur={handleBlurEmail}
                         />

@@ -9,47 +9,38 @@ import styles from "./styles";
 
 const Splash = () => {
     const navigation = useNavigation()
-    const [user, setUser] = useState();
-    const onAuthStateSave = (user: any) => setUser(user)
-    
+
     const getUserUid = async () => {
         try {
-          const uid = await AsyncStorage.getItem('userUID');
-          
-          if (uid !== null) {
-            console.log('User UID:', uid);
-            return uid;
-          } else {
-            console.log('No UID found');
-            return null;
-          }
+            const uid = await AsyncStorage.getItem('userUID');
+            if (uid !== null) {
+                console.log('User UID:', uid);
+                return uid;
+            } else {
+                console.log('No UID found');
+                return null;
+            }
         } catch (error) {
-          console.error('Error retrieving UID from AsyncStorage', error);
-          return null;
+            console.error('Error retrieving UID from AsyncStorage', error);
+            return null;
         }
-      };
+    };
 
     useEffect(() => {
-        const res = auth().onAuthStateChanged(onAuthStateSave)
-        return res;
-    }, []);
-
-    useEffect(() => {
-        // if (user !== undefined) {
-            setTimeout(async() => {
-                const tut=await AsyncStorage.getItem('tut')
-                if (user) {
-                    navigation.reset({index:0,routes:[{name:'BottomTab'}]});
-                } else if(tut){
-                    navigation.reset({index:0,routes:[{name:'Login'}]});
-                }
-                else {
-                    navigation.reset({index:0,routes:[{name:'GetStarted'}]});
-                }
-            }, 2000);
-        // }
+        setTimeout(async () => {
+            const isLogin = await AsyncStorage.getItem('isLogin')
+            const tut = await AsyncStorage.getItem('tut')
+            if (isLogin) {
+                navigation.reset({ index: 0, routes: [{ name: 'BottomTab' }] });
+            } else if (tut) {
+                navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+            }
+            else {
+                navigation.reset({ index: 0, routes: [{ name: 'GetStarted' }] });
+            }
+        }, 2000);
         getUserUid();
-    }, [user,navigation]);
+    }, [navigation]);
 
     return (
         <View style={styles.container}>

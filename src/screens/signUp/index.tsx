@@ -16,7 +16,6 @@ const SignUp = () => {
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
     const [secure, setSecure] = useState(false);
-
     const navigation = useNavigation();
 
     const handleNav = () => {
@@ -41,6 +40,7 @@ const SignUp = () => {
                 }
             })
     }
+
     const togglepass = () => {
         setSecure(!secure);
     }
@@ -74,6 +74,7 @@ const SignUp = () => {
 
         return nameIsValid && emailIsValid && passwordIsValid;
     };
+
     const handleBlurName = () => {
         if (name.trim() === '') {
             setNameValid(false);
@@ -97,7 +98,6 @@ const SignUp = () => {
         }
     };
 
-
     const handleBlurPassword = () => {
         if (pass.trim() === '') {
             setPasswordValid(false);
@@ -109,11 +109,9 @@ const SignUp = () => {
         }
     };
 
-
     return (
         <SafeAreaView>
             <KeyboardAvoidingView
-                // style={styles.container}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <ScrollView showsVerticalScrollIndicator={false}>

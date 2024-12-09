@@ -24,14 +24,6 @@ const styles=StyleSheet.create({
         fontWeight: '400',
         color:'grey',
     },
-    // btn:{
-    //     backgroundColor:'#51a6f5',
-    //     width:responsiveWidth(92),
-    //     height:responsiveWidth(12),
-    //     borderRadius:10,
-    //     justifyContent:'center',
-    //     alignItems:'center'
-    // },
     dot:{
         width:responsiveWidth(2.5),
         height:responsiveWidth(2.5),

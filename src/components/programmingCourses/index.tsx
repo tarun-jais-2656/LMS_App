@@ -11,21 +11,11 @@ import styles from './styles';
 
 
 const bannerData1 = [
-    {
-        bannerImageUrl: icon[77]
-    },
-    {
-        bannerImageUrl: icon[100]
-    },
-    {
-        bannerImageUrl: icon[66]
-    },
-    {
-        bannerImageUrl: icon[44]
-    },
-    {
-        bannerImageUrl: icon[11]
-    },
+    {bannerImageUrl: icon[77]},
+    {bannerImageUrl: icon[100]},
+    {bannerImageUrl: icon[66]},
+    {bannerImageUrl: icon[44]},
+    {bannerImageUrl: icon[11]},
 ];
 
 const ProgrammingCourses = () => {
@@ -64,7 +54,6 @@ const ProgrammingCourses = () => {
                 setLoading(false);
             }
         };
-
         fetchCourses();
     }, []);
 

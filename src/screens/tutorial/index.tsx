@@ -50,6 +50,7 @@ const Tutorial = () => {
         await AsyncStorage.setItem('tut', tut);
         navigation.navigate('Login')
     }
+
     return (
         <SafeAreaView style={styles.container}>
             <AppIntroSlider
@@ -69,7 +70,6 @@ const Tutorial = () => {
                 )}
                 showSkipButton={false}
                 dotStyle={styles.dot}
-                // bottomButton={true}
                 activeDotStyle={styles.activeDot}
             />
         </SafeAreaView>

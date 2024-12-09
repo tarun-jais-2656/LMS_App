@@ -12,26 +12,18 @@ import { addToPaidCourses } from "../../../redux/paidCourses/paidCoursesSlice";
 import { Slider } from "../../../components/slider";
 import styles from "./styles";
 
-
 const bannerData1 = [
-    {
-        bannerImageUrl: icon[1]
-    },
-    {
-        bannerImageUrl: icon[2]
-    },
-    {
-        bannerImageUrl: icon[3]
-    },
-    {
-        bannerImageUrl: icon[4]
-    },
+    { bannerImageUrl: icon[1] },
+    { bannerImageUrl: icon[2] },
+    { bannerImageUrl: icon[3] },
+    { bannerImageUrl: icon[4] },
 ];
 
 export function Home() {
     const navigation = useNavigation();
     const inputRef = useRef(null);
-    const [pic,setPic]=useState(null);
+    const [pic, setPic] = useState('');
+    const [name, setName] = useState('');
 
     const CourseItem = ({ name, img, price }) => (
         <View style={styles.item}>
@@ -50,7 +42,6 @@ export function Home() {
         navigation.navigate('Search')
     }
 
-    const name = AsyncStorage.getItem('name')
     const myCartCourses = useSelector(state => state.cart);
     const count = myCartCourses.length;
     const dispatch = useDispatch();
@@ -58,13 +49,11 @@ export function Home() {
     const fetchCartData = async () => {
         try {
             const userUID = await AsyncStorage.getItem('userUID');
-
             const cartSnapshot = await firestore()
                 .collection('users')
                 .doc(userUID)
                 .collection('cart')
                 .get();
-
             const cartItems = cartSnapshot.docs.map(doc => doc.data());
             cartItems.forEach(item => {
                 const alreadyInCart = myCartCourses.some(course => course.id === item.id);
@@ -82,13 +71,11 @@ export function Home() {
     const fetchPaidCourses = async () => {
         try {
             const userUID = await AsyncStorage.getItem('userUID');
-
             const paidSnapshot = await firestore()
                 .collection('users')
                 .doc(userUID)
                 .collection('paidCourses')
                 .get();
-
             const paidItems = paidSnapshot.docs.map(doc => doc.data());
             paidItems.forEach(item => {
                 const alreadyInPaidCourse = paidCourses.some(course => course.id === item.id);
@@ -102,26 +89,29 @@ export function Home() {
         }
     };
 
-    const loadProfilePic = async () => {
+    const loadProfileData = async () => {
         try {
             const storedPic = await AsyncStorage.getItem('userProfilePic');
+            const storedName = await AsyncStorage.getItem('name');
             if (storedPic) {
                 setPic(storedPic);
             } else {
-                setPic(null);
+                setPic('');
+            }
+            if (storedName) {
+                setName(storedName);
+            } else {
+                setName('User');
             }
         } catch (error) {
             console.error('Error loading profile picture from AsyncStorage:', error);
         }
     };
 
-
-
-
     useEffect(() => {
         fetchCartData();
         fetchPaidCourses();
-        // loadProfilePic();
+        loadProfileData();
     }, []);
 
 
@@ -131,7 +121,7 @@ export function Home() {
                 <View style={styles.flexRow}>
                     <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
                         <Image
-                            source={pic!==null ? { uri: pic } : icon.userr}
+                            source={pic ? { uri: pic } : icon.userr}
                             style={styles.userr}
                         />
                     </TouchableOpacity>

@@ -28,7 +28,6 @@ export const Profile = () => {
             console.error('Error loading profile picture from AsyncStorage:', error);
           }
         };
-    
         loadProfilePic();
       }, []);
 
@@ -37,6 +36,8 @@ export const Profile = () => {
             await auth().signOut();
             await AsyncStorage.removeItem('userUID');
             await AsyncStorage.removeItem('name');
+            await AsyncStorage.removeItem('userProfilePic');
+            await AsyncStorage.removeItem('isLogin');
             dispatch(clearCart());
             dispatch(clearPaidCourses());
             navigation.reset({index:0,routes:[{name:'Login'}]});

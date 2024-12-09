@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, SafeAreaView, TouchableOpacity, TextInput, FlatList, } from "react-native";
+import { View, Text, Image, SafeAreaView, TouchableOpacity, TextInput, FlatList, Alert, } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { icon } from "../../assets/icons";
@@ -12,9 +12,6 @@ const EditProfile = ({ navigation }) => {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [pic, setPic] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [genderModalVisible, setGenderModalVisible] = useState(false);
-    const [selectedGender, setSelectedGender] = useState('');
-    const [genders] = useState(['Male', 'Female', 'Other']);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const launchGallery = async() => {
@@ -31,7 +28,6 @@ const EditProfile = ({ navigation }) => {
         });
     };
     
-
     const launchCam = async() => {
         launchCamera({ mediaType: 'photo' },result => {
             if (result.didCancel) {
@@ -41,13 +37,14 @@ const EditProfile = ({ navigation }) => {
             } else {
                 const imageUri = result.assets[0].uri;
                 setPic(imageUri); 
-                setIsModalVisible(!isModalVisible);  // Toggle modal visibility
+                setIsModalVisible(!isModalVisible); 
             }
         });
     };
 
     const saveImg=async()=>{
         await AsyncStorage.setItem('userProfilePic', pic);
+        Alert.alert("Profile updated successfully!")
     }
 
     const onpress = () => {
@@ -56,16 +53,7 @@ const EditProfile = ({ navigation }) => {
             routes: [{ name: 'BottomTab', params: { screen: 'Profile' } }],
         });
     };
-
-    const toggleGenderModal = () => {
-        setGenderModalVisible(prev => !prev);
-    };
-
-    const selectGender = (gender) => {
-        setSelectedGender(gender);
-        setGenderModalVisible(false);
-    };
-
+    
     const toggleDatePicker = () => {
         setShowDatePicker(prev => !prev);
     };
@@ -141,48 +129,13 @@ const EditProfile = ({ navigation }) => {
                             onChange={handleDateChange}
                         />
                     )}
-
-                    <View style={styles.genderView}>
-                        <TextInput
-                            placeholder="Gender"
-                            placeholderTextColor={"#ccc"}
-                            style={styles.gender}
-                            value={selectedGender}
-                            editable={false}
-                        />
-                        <TouchableOpacity onPress={toggleGenderModal}>
-                            <View style={styles.dropView}>
-                                <Image source={icon.drop} style={styles.dropImg} />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
                     <TextInput style={styles.name} placeholder="Email" placeholderTextColor={"#ccc"} />
 
                     <View style={styles.updateButton}>
                         <TouchableOpacity onPress={saveImg}>
                             <Text style={styles.updateButtonTxt}>Update</Text>
                         </TouchableOpacity>
-                    </View>
-
-                    <Modal transparent={true} visible={genderModalVisible} animationType="slide">
-                        <View style={styles.genderModalView}>
-                            <View style={styles.genderModal}>
-                                <FlatList
-                                    data={genders}
-                                    keyExtractor={(item) => item}
-                                    renderItem={({ item }) => (
-                                        <TouchableOpacity onPress={() => selectGender(item)}>
-                                            <Text style={styles.genderItem}>{item}</Text>
-                                        </TouchableOpacity>
-                                    )}
-                                />
-                                <TouchableOpacity onPress={toggleGenderModal}>
-                                    <Text style={styles.cancel}>Cancel</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </Modal>
-                    
+                    </View>                    
                 </View>
             </View>
 

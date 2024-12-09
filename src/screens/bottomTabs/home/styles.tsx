@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
         marginTop:10,
         marginBottom:10
     },
-
     backgroundViewButtonContainer: {
         borderWidth: 1.1,
         borderColor: "rgba(255, 255, 255, 0.5)",
@@ -128,7 +127,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 25,
     },
-
     backgroundViewButtonText: {
         color: "#FFFF",
     },

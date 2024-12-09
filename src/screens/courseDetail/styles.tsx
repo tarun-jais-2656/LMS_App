@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-
 const styles = StyleSheet.create({
     container1: {
         flex: 1,
@@ -128,7 +127,8 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 8,
         borderWidth: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom:10
     },
     btnTxt: {
         fontSize: 16,

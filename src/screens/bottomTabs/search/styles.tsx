@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
     },
     searchInput: {
-        // height: 40,
         color:'#000000',
         borderColor: '#ccc',
         borderWidth: 1,
@@ -43,8 +42,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         height: 350,
         padding: 10,
-        elevation: 5, // Shadow for Android
-        shadowColor: '#000', // Shadow for iOS
+        elevation: 5, 
+        shadowColor: '#000', 
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,

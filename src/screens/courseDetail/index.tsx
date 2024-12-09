@@ -23,6 +23,7 @@ export default function CourseDetail() {
     const [isModalVisible, setModalVisible] = useState(false);
     const route = useRoute();
     const { course } = route.params;
+
     useEffect(() => {
         const courseInCart = myCartCourses.some(item => item.id === course.id);
         const courseInPaidCourse = myPaidCourses.some(item => item.id === course.id);
@@ -34,7 +35,6 @@ export default function CourseDetail() {
         const Id = String(id);
         try {
             const userUID = await AsyncStorage.getItem('userUID');
-
             await firestore()
                 .collection('users')
                 .doc(userUID)
@@ -43,7 +43,6 @@ export default function CourseDetail() {
                 .delete();
 
             dispatch(removeFromCart(id));
-
         } catch (error) {
             console.error('Error removing course:', error);
             Alert.alert('Error', 'There was an issue removing the course from your cart.');
@@ -84,7 +83,6 @@ export default function CourseDetail() {
     const handlePayment = async () => {
         try {
             const userUID = await AsyncStorage.getItem('userUID');
-
             if (userUID) {
                 await firestore()
                     .collection('users')
@@ -110,7 +108,6 @@ export default function CourseDetail() {
             }
         } catch (error) {
             console.error('Error adding paidCourse:', error);
-            // Alert.alert('Error adding paidCourse.');
         }
     };
 
@@ -123,7 +120,7 @@ export default function CourseDetail() {
             key: 'rzp_test_GnpMgYfbVsmYuV',
             amount: total*100*83,
             name: 'Appinventiv',
-            order_id: '',//Replace this with an order_id created using Orders API.
+            order_id: '',
             prefill: {
                 email: 'tarun.jais@gmail.com',
                 contact: '9191919191',
@@ -132,15 +129,12 @@ export default function CourseDetail() {
             theme: { color: '#53a20e' }
         }
         RazorpayCheckout.open(options).then((data) => {
-            // handle success
             handlePayment();
             Alert.alert(`Success: ${data.razorpay_payment_id}`);
         }).catch((error) => {
-            // handle failure
             Alert.alert(`Error: ${error.code} | ${error.description}`);
         });
     }
-
 
     const handleNav = () => {
         navigation.reset({
