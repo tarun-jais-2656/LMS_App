@@ -11,11 +11,11 @@ import styles from './styles';
 
 
 const bannerData1 = [
-    {bannerImageUrl: icon[77]},
-    {bannerImageUrl: icon[100]},
-    {bannerImageUrl: icon[66]},
-    {bannerImageUrl: icon[44]},
-    {bannerImageUrl: icon[11]},
+    { bannerImageUrl: icon[77] },
+    { bannerImageUrl: icon[100] },
+    { bannerImageUrl: icon[66] },
+    { bannerImageUrl: icon[44] },
+    { bannerImageUrl: icon[11] },
 ];
 
 const ProgrammingCourses = () => {
@@ -88,7 +88,9 @@ const ProgrammingCourses = () => {
             <View style={styles.container}>
                 <Text style={styles.heading}>Recommended Courses</Text>
                 {loading ? (
-                    <ActivityIndicator size="small" color="#0000ff" />
+                    <View style={styles.card1}>
+                        <ActivityIndicator size="small" color="#0000ff" />
+                    </View>
                 ) : (
                     <FlatList
                         data={first}
@@ -103,7 +105,9 @@ const ProgrammingCourses = () => {
             <View style={styles.container}>
                 <Text style={styles.heading}>Trending Courses</Text>
                 {loading ? (
-                    <ActivityIndicator size="small" color="#0000ff" />
+                    <View style={styles.card1}>
+                        <ActivityIndicator size="small" color="#0000ff" />
+                    </View>
                 ) : (
                     <FlatList
                         data={second}
@@ -114,12 +118,14 @@ const ProgrammingCourses = () => {
                     />
                 )}
             </View>
-            <Slider bannerData={bannerData1} time={1.25}/>
+            <Slider bannerData={bannerData1} time={1.25} />
 
             <View style={styles.container}>
                 <Text style={styles.heading}>Featured Courses</Text>
                 {loading ? (
-                    <ActivityIndicator size="small" color="#0000ff" />
+                    <View style={styles.card1}>
+                        <ActivityIndicator size="small" color="#0000ff" />
+                    </View>
                 ) : (
                     <FlatList
                         data={third}

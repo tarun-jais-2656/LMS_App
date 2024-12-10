@@ -7,7 +7,7 @@ const styles=StyleSheet.create({
         marginHorizontal: 16,
         resizeMode:'contain'
     },
-    img:{ width: "auto", height: 200 },
+    img:{ width: "auto", height: 200,marginRight:10, },
     slide: { flex: 1 },
     dot: {
         backgroundColor: "#C6C7CC",

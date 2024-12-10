@@ -26,6 +26,12 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         marginVertical: 20
     },
+    card1: {
+        marginHorizontal: 8,
+        height: 120,
+        marginVertical: 20,
+        justifyContent:'center'
+    },
     image: {
         width: '100%',
         height: 180,

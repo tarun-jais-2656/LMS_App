@@ -11,6 +11,7 @@ import { addCourseToCart, removeFromCart } from "../../redux/myCart/myCartSlice"
 import { addToPaidCourses } from "../../redux/paidCourses/paidCoursesSlice";
 import styles from "./styles";
 import RazorpayCheckout from 'react-native-razorpay';
+import AlertModal from "../../components/alertModal";
 const { width, height } = Dimensions.get("window");
 
 export default function CourseDetail() {
@@ -78,6 +79,10 @@ export default function CourseDetail() {
         }
     };
     const onBackdropPress = () => {
+        setModalVisible(false);
+    };
+
+    const toggleModal = () => {
         setModalVisible(!isModalVisible);
     };
     const handlePayment = async () => {
@@ -130,7 +135,8 @@ export default function CourseDetail() {
         }
         RazorpayCheckout.open(options).then((data) => {
             handlePayment();
-            Alert.alert(`Success: ${data.razorpay_payment_id}`);
+            toggleModal();
+            // Alert.alert(`Success: ${data.razorpay_payment_id}`);
         }).catch((error) => {
             Alert.alert(`Error: ${error.code} | ${error.description}`);
         });
@@ -282,11 +288,17 @@ export default function CourseDetail() {
                     ) : (
                         <Text>No course data available</Text>
                     )}
-                    <Modalpay
+                    {/* <Modalpay
                         isModalVisible={isModalVisible}
                         onBackdropPress={onBackdropPress}
                         total={course.price}
                         handlePayment={handlePayment}
+                    /> */}
+                    <AlertModal
+                        isModalVisible={isModalVisible}
+                        msg="Payment Success!"
+                        onBackdropPress={onBackdropPress}
+                        onClose={toggleModal}
                     />
                 </ScrollView>
             </SafeAreaView>

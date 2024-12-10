@@ -6,11 +6,22 @@ import { useNavigation } from "@react-navigation/native";
 import { firebase } from "@react-native-firebase/auth";
 import styles from "./styles";
 import { Header } from "../../components/header";
+import AlertModal from "../../components/alertModal";
 
 export default function Forgot() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [errormsg, setErrormsg] = useState('');
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
+
+    const onBackdropPress = () => {
+        setModalVisible(false);
+    }
 
     const handleNav = () => {
         navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
@@ -30,7 +41,8 @@ export default function Forgot() {
             await firebase.auth().sendPasswordResetEmail(email);
             setEmail('')
             setErrormsg('')
-            Alert.alert('Password reset email sent!')
+            // Alert.alert('Password reset email sent!')
+            toggleModal();
             console.log('Password reset email sent!');
         } catch (error) {
             console.log('Error sending reset email:', error);
@@ -79,6 +91,12 @@ export default function Forgot() {
                             </View>
                         </View>
                     </View>
+                    <AlertModal
+                        isModalVisible={isModalVisible}
+                        msg="Reset password link sent to email!"
+                        onBackdropPress={onBackdropPress}
+                        onClose={toggleModal}
+                    />
                 </ScrollView>
             </KeyboardAvoidingView>
         </View>

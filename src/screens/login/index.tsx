@@ -6,6 +6,7 @@ import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from "./styles";
+import AlertModal from "../../components/alertModal";
 
 const Login = () => {
 
@@ -34,9 +35,26 @@ const Login = () => {
     const [pass, setPass] = useState('');
     const [emailValid, setEmailValid] = useState(true);
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
+    const [passwordValid, setPasswordValid] = useState(true);
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
     const [secure, setSecure] = useState(false);
     const [isLogin, setIsLogin] = useState('flase');
     const navigation = useNavigation();
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [iseyeVisible, setiseyeVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
+    const toggleeye = () => {
+        setiseyeVisible(!iseyeVisible);
+    };
+
+
+    const onBackdropPress = () => {
+        setModalVisible(false);
+    }
 
     const handleNav = () => {
         navigation.navigate('SignUp');
@@ -53,15 +71,10 @@ const Login = () => {
             await AsyncStorage.setItem('userUID', userUid);
             const name = email.replace('@gmail.com', '')
             await AsyncStorage.setItem('name', name);
-            await AsyncStorage.setItem('isLogin',isLogin);
-            Alert.alert('Login successfully!');
+            await AsyncStorage.setItem('isLogin', isLogin);
             navigation.reset({ index: 0, routes: [{ name: 'BottomTab' }] });
         } catch (error) {
-            if (error.code === 'auth/wrong-password') {
-                Alert.alert('Password is incorrect!');
-            } else if (error.code === 'auth/invalid-credential') {
-                Alert.alert('Invalid credentials!');
-            }
+            toggleModal();
         }
     };
 
@@ -81,8 +94,26 @@ const Login = () => {
         }
     };
 
+    const validatePassword = (pass) => {
+        return pass.length >= 6
+    };
+
+    const handleBlurPassword = () => {
+        if (pass.trim() === '') {
+            setPasswordValid(false);
+            setPasswordErrorMessage('Password cannot be empty');
+        }
+        else {
+            const passwordIsValid = validatePassword(pass);
+            setPasswordValid(passwordIsValid);
+            setPasswordErrorMessage(passwordIsValid ? '' : 'Password must be at least 6 characters');
+        }
+    };
+
+
     const togglepass = () => {
         setSecure(!secure);
+        setiseyeVisible(!iseyeVisible)
     }
 
     return (
@@ -130,15 +161,24 @@ const Login = () => {
                                 secureTextEntry={secure}
                                 value={pass}
                                 onChangeText={value => setPass(value)}
+                                onBlur={handleBlurPassword}
                             />
                         </View>
                         <TouchableOpacity onPress={togglepass}>
+                            { iseyeVisible ?
                             <Image
                                 source={icon.eye}
                                 style={styles.eye}
                             />
+                            :
+                            <Image
+                                source={icon.hide}
+                                style={styles.eye}
+                            />
+                            }
                         </TouchableOpacity>
                     </View>
+                    {!passwordValid && <Text style={styles.errorText}>{passwordErrorMessage}</Text>}
                     <View style={styles.forgotView}>
                         <Text style={styles.forgotTxt} onPress={handleNavForgot}>Forgot password</Text>
                     </View>
@@ -167,6 +207,12 @@ const Login = () => {
                             <Text style={styles.txtColor} onPress={handleNav}>Sign Up</Text>
                         </View>
                     </View>
+                    <AlertModal
+                        isModalVisible={isModalVisible}
+                        msg="Invalid credentials!"
+                        onBackdropPress={onBackdropPress}
+                        onClose={toggleModal}
+                    />
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

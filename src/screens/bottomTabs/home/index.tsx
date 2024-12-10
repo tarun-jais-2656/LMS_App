@@ -26,13 +26,15 @@ export function Home() {
     const [name, setName] = useState('');
 
     const CourseItem = ({ name, img, price }) => (
-        <View style={styles.item}>
-            <Image source={{ uri: img }} style={styles.image} />
-            <View style={styles.textContainer}>
-                <Text style={styles.title}>{name}</Text>
-                <Text style={styles.price}>${price.toFixed(2)}</Text>
+        <TouchableOpacity onPress={handleNav}>
+            <View style={styles.item}>
+                <Image source={{ uri: img }} style={styles.image} />
+                <View style={styles.textContainer}>
+                    <Text style={styles.title}>{name}</Text>
+                    <Text style={styles.price}>${price.toFixed(2)}</Text>
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 
     const handleNav = () => {
@@ -162,7 +164,7 @@ export function Home() {
                     ref={inputRef}
                 />
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{marginTop:10,}}>
                 <Slider bannerData={bannerData1} time={2} />
                 <ProgrammingCourses />
                 <Text style={styles.heading}>Trending Courses</Text>

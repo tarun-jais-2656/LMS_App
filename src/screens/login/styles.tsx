@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 12,
         marginLeft: 40,
+        marginTop:5,
     }
 })
 export default styles;

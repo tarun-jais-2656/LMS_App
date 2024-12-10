@@ -72,5 +72,6 @@ export const icon={
     44:require('../icons/44.jpg'),
     11:require('../icons/11.jpg'),
     noCourse:require('../icons/noCourse.png'),
+    hide:require('../icons/hide.png'),
 
 }

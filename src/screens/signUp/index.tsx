@@ -17,10 +17,15 @@ const SignUp = () => {
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
     const [secure, setSecure] = useState(false);
     const navigation = useNavigation();
+    const [iseyeVisible, setiseyeVisible] = useState(false);
+
 
     const handleNav = () => {
         navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
     }
+    const toggleeye = () => {
+        setiseyeVisible(!iseyeVisible);
+    };
 
     const onRegister = () => {
         if (!validateInputs()) return;
@@ -43,6 +48,7 @@ const SignUp = () => {
 
     const togglepass = () => {
         setSecure(!secure);
+        setiseyeVisible(!iseyeVisible)
     }
 
     const validateName = (name) => {
@@ -173,10 +179,17 @@ const SignUp = () => {
                             />
                         </View>
                         <TouchableOpacity onPress={togglepass}>
+                        { iseyeVisible ?
                             <Image
                                 source={icon.eye}
                                 style={styles.eye}
                             />
+                            :
+                            <Image
+                                source={icon.hide}
+                                style={styles.eye}
+                            />
+                            }
                         </TouchableOpacity>
                     </View>
                     {!passwordValid && <Text style={styles.errorText}>{passwordErrorMessage}</Text>}

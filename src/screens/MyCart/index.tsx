@@ -88,7 +88,7 @@ export default function MyCart() {
         }
         RazorpayCheckout.open(options).then((data) => {
             handlePayment();
-            Alert.alert(`Success: ${data.razorpay_payment_id}`);
+            // Alert.alert(`Success: ${data.razorpay_payment_id}`);
         }).catch((error) => {
             Alert.alert(`Error: ${error.code} | ${error.description}`);
         });
