@@ -4,6 +4,7 @@ import { icon } from "../../assets/icons";
 import { useNavigation } from "@react-navigation/native";
 import auth from '@react-native-firebase/auth';
 import styles from "./styles";
+import AlertModal from "../../components/alertModal";
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
@@ -15,35 +16,57 @@ const SignUp = () => {
     const [nameErrorMessage, setNameErrorMessage] = useState('');
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
-    const [secure, setSecure] = useState(false);
+    const [secure, setSecure] = useState(true);
     const navigation = useNavigation();
     const [iseyeVisible, setiseyeVisible] = useState(false);
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [isModalVisible1, setModalVisible1] = useState(false);
+    const [isModalVisible2, setModalVisible2] = useState(false);
 
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+    const toggleModal1 = () => {
+        setModalVisible1(!isModalVisible1);
+    };
+    const toggleModal2 = () => {
+        setModalVisible2(!isModalVisible2);
+    };
+    const onBackdropPress = () => {
+        setModalVisible(false);
+    }
+    const onBackdropPress1 = () => {
+        setModalVisible1(false);
+    }
+    const onBackdropPress2 = () => {
+        setModalVisible2(false);
+    }
 
     const handleNav = () => {
         navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
     }
-    const toggleeye = () => {
-        setiseyeVisible(!iseyeVisible);
-    };
 
     const onRegister = () => {
-        if (!validateInputs()) return;
-
-        auth().createUserWithEmailAndPassword(email, pass)
-            .then(() => {
-                setEmail('');
-                setPass('');
-                setName('');
-                Alert.alert('User account created.');
-            }).catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    Alert.alert('That email address is already in use!');
-                }
-                if (error.code === 'auth/invalid-email') {
-                    Alert.alert('That email address is invalid!');
-                }
-            })
+        if (name == '' || email == '' || pass == '') {
+            toggleModal2();
+        }
+        else if (!validateInputs()) return;
+        else {
+            auth().createUserWithEmailAndPassword(email, pass)
+                .then(() => {
+                    setEmail('');
+                    setPass('');
+                    setName('');
+                    toggleModal1();
+                }).catch(error => {
+                    if (error.code === 'auth/email-already-in-use') {
+                        toggleModal();
+                    }
+                    if (error.code === 'auth/invalid-email') {
+                        Alert.alert('That email address is invalid!');
+                    }
+                })
+        }
     }
 
     const togglepass = () => {
@@ -120,7 +143,7 @@ const SignUp = () => {
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView keyboardShouldPersistTaps={'handled'} showsVerticalScrollIndicator={false}>
                     <View style={styles.imgView}>
                         <Image
                             source={icon.sign_in}
@@ -179,16 +202,16 @@ const SignUp = () => {
                             />
                         </View>
                         <TouchableOpacity onPress={togglepass}>
-                        { iseyeVisible ?
-                            <Image
-                                source={icon.eye}
-                                style={styles.eye}
-                            />
-                            :
-                            <Image
-                                source={icon.hide}
-                                style={styles.eye}
-                            />
+                            {iseyeVisible ?
+                                <Image
+                                    source={icon.eye}
+                                    style={styles.eye}
+                                />
+                                :
+                                <Image
+                                    source={icon.hide}
+                                    style={styles.eye}
+                                />
                             }
                         </TouchableOpacity>
                     </View>
@@ -218,6 +241,24 @@ const SignUp = () => {
                             <Text style={styles.txtColor} onPress={handleNav}>Sign In</Text>
                         </View>
                     </View>
+                    <AlertModal
+                        isModalVisible={isModalVisible}
+                        msg="That email address is already in use!"
+                        onBackdropPress={onBackdropPress}
+                        onClose={toggleModal}
+                    />
+                    <AlertModal
+                        isModalVisible={isModalVisible1}
+                        msg="User account created!"
+                        onBackdropPress={onBackdropPress1}
+                        onClose={toggleModal1}
+                    />
+                    <AlertModal
+                        isModalVisible={isModalVisible2}
+                        msg="Fields can't be empty!"
+                        onBackdropPress={onBackdropPress2}
+                        onClose={toggleModal2}
+                    />
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

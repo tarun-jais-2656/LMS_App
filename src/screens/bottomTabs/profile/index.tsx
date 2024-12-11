@@ -11,25 +11,26 @@ import { clearPaidCourses } from "../../../redux/paidCourses/paidCoursesSlice";
 
 export const Profile = () => {
     const navigation = useNavigation()
-    const name=AsyncStorage.getItem('name')
-    const dispatch=useDispatch();
-    const[ pic,setPic]=useState();
+    const name = AsyncStorage.getItem('name')
+    const dispatch = useDispatch();
+    const [pic, setPic] = useState();
 
-    useEffect(() => {
-        const loadProfilePic = async () => {
-          try {
+    const loadProfilePic = async () => {
+        try {
             const storedPic = await AsyncStorage.getItem('userProfilePic');
             if (storedPic) {
-              setPic(storedPic);  
+                setPic(storedPic);
             } else {
-              setPic(null); 
+                setPic(null);
             }
-          } catch (error) {
+        } catch (error) {
             console.error('Error loading profile picture from AsyncStorage:', error);
-          }
-        };
+        }
+    };
+    
+    useEffect(() => {
         loadProfilePic();
-      }, []);
+    }, []);
 
     const onLogout = async () => {
         try {
@@ -40,7 +41,7 @@ export const Profile = () => {
             await AsyncStorage.removeItem('isLogin');
             dispatch(clearCart());
             dispatch(clearPaidCourses());
-            navigation.reset({index:0,routes:[{name:'Login'}]});
+            navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
         } catch (error) {
             Alert.alert("Unable to Logout");
         }

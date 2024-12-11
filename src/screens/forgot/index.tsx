@@ -28,12 +28,12 @@ export default function Forgot() {
     }
 
     const handleForgotPassword = async () => {
-        if (validateEmail(email) == false) {
-            setErrormsg('Invalid email address entered')
+        if (!email) {
+            setErrormsg('Please enter your email address!')
             return;
         }
-        if (!email) {
-            console.log('Please enter your email address');
+        if (validateEmail(email) == false) {
+            setErrormsg('Invalid email address entered')
             return;
         }
 
@@ -41,7 +41,6 @@ export default function Forgot() {
             await firebase.auth().sendPasswordResetEmail(email);
             setEmail('')
             setErrormsg('')
-            // Alert.alert('Password reset email sent!')
             toggleModal();
             console.log('Password reset email sent!');
         } catch (error) {

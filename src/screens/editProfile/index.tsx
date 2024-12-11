@@ -56,6 +56,7 @@ const EditProfile = ({ navigation }) => {
     const saveProfileData = async () => {
         if (name !== '') {
             await AsyncStorage.setItem('name', name);
+            setName('')
         }
         await AsyncStorage.setItem('userProfilePic', pic);
         // Alert.alert("Profile updated successfully!")
@@ -82,20 +83,20 @@ const EditProfile = ({ navigation }) => {
         }
     };
 
-    useEffect(() => {
-        const loadProfilePic = async () => {
-            try {
-                const storedPic = await AsyncStorage.getItem('userProfilePic');
-                if (storedPic) {
-                    setPic(storedPic);
-                } else {
-                    setPic(null);
-                }
-            } catch (error) {
-                console.error('Error loading profile picture from AsyncStorage:', error);
+    const loadProfilePic = async () => {
+        try {
+            const storedPic = await AsyncStorage.getItem('userProfilePic');
+            if (storedPic) {
+                setPic(storedPic);
+            } else {
+                setPic(null);
             }
-        };
+        } catch (error) {
+            console.error('Error loading profile picture from AsyncStorage:', error);
+        }
+    };
 
+    useEffect(() => {
         loadProfilePic();
     }, []);
 

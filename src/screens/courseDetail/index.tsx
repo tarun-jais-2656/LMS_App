@@ -135,7 +135,7 @@ export default function CourseDetail() {
         }
         RazorpayCheckout.open(options).then((data) => {
             handlePayment();
-            toggleModal();
+            // toggleModal();
             // Alert.alert(`Success: ${data.razorpay_payment_id}`);
         }).catch((error) => {
             Alert.alert(`Error: ${error.code} | ${error.description}`);
@@ -155,7 +155,7 @@ export default function CourseDetail() {
             <SafeAreaView style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {course ? (
-                        <>
+                        <React.Fragment>
                             <Image source={{ uri: course.image_480x270 }} style={styles.image} />
                             <Text style={styles.description}>{course.headline}</Text>
                             <Text style={styles.title}>{course.title}</Text>
@@ -284,7 +284,7 @@ export default function CourseDetail() {
                             <TouchableOpacity style={styles.btn}>
                                 <Text style={styles.btnTxt}>See more Reviews</Text>
                             </TouchableOpacity>
-                        </>
+                        </React.Fragment>
                     ) : (
                         <Text>No course data available</Text>
                     )}

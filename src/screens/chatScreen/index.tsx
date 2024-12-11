@@ -51,6 +51,8 @@ export const ChatScreen = () => {
         }
     }, [userUID, course.id]);
 
+    //try catch is missing in onSend
+
     const onSend = async (messageArray) => {
         const msg = messageArray[0];
         const myMsg = {
@@ -72,12 +74,22 @@ export const ChatScreen = () => {
             });
     };
     const handleNav = () => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'CoursePlaylist', params: { course } }]
-        });
-
+        navigation.pop();
+        navigation.navigate('CoursePlaylist', { course }); 
     };
+
+    //inline function needs to be changed
+
+    const onRenderSend = props => {
+        return (
+            <Send {...props} containerStyle={{ justifyContent: 'center' }}>
+                <Image
+                    source={icon.send}
+                    style={styles.sendbtn}
+                />
+            </Send>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -119,16 +131,7 @@ export const ChatScreen = () => {
                     _id: userUID,
                 }}
                 alwaysShowSend
-                renderSend={props => {
-                    return (
-                        <Send {...props} containerStyle={{ justifyContent: 'center' }}>
-                            <Image
-                                source={icon.send}
-                                style={styles.sendbtn}
-                            />
-                        </Send>
-                    );
-                }}
+                renderSend={onRenderSend}
                 renderInputToolbar={props => {
                     return (
                         <View style={styles.input}>

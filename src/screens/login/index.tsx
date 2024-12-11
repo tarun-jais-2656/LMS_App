@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, KeyboardAvoidingView, Linking, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { icon } from "../../assets/icons";
 import { useNavigation } from "@react-navigation/native";
 import auth from '@react-native-firebase/auth';
@@ -37,23 +37,25 @@ const Login = () => {
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
     const [passwordValid, setPasswordValid] = useState(true);
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
-    const [secure, setSecure] = useState(false);
+    const [secure, setSecure] = useState(true);
     const [isLogin, setIsLogin] = useState('flase');
     const navigation = useNavigation();
     const [isModalVisible, setModalVisible] = useState(false);
+    const [isModalVisible1, setModalVisible1] = useState(false);
     const [iseyeVisible, setiseyeVisible] = useState(false);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
     };
-
-    const toggleeye = () => {
-        setiseyeVisible(!iseyeVisible);
+    const toggleModal1 = () => {
+        setModalVisible1(!isModalVisible1);
     };
-
 
     const onBackdropPress = () => {
         setModalVisible(false);
+    }
+    const onBackdropPress1 = () => {
+        setModalVisible1(false);
     }
 
     const handleNav = () => {
@@ -74,7 +76,11 @@ const Login = () => {
             await AsyncStorage.setItem('isLogin', isLogin);
             navigation.reset({ index: 0, routes: [{ name: 'BottomTab' }] });
         } catch (error) {
-            toggleModal();
+            if(email=='' || pass==''){
+                toggleModal1();
+            }else{
+                toggleModal();
+            }
         }
     };
 
@@ -110,10 +116,15 @@ const Login = () => {
         }
     };
 
-
     const togglepass = () => {
         setSecure(!secure);
         setiseyeVisible(!iseyeVisible)
+    }
+
+    const openGit = () => {
+        Linking.canOpenURL('https://github.com/tarun-jais-2656?tab=repositories').then(() => {
+            Linking.openURL('https://github.com/tarun-jais-2656?tab=repositories')
+        }).catch()
     }
 
     return (
@@ -122,7 +133,7 @@ const Login = () => {
                 style={styles.container}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView keyboardShouldPersistTaps={'handled'} showsVerticalScrollIndicator={false}>
                     <View style={styles.imgView}>
                         <Image
                             source={icon.sign_in}
@@ -165,16 +176,16 @@ const Login = () => {
                             />
                         </View>
                         <TouchableOpacity onPress={togglepass}>
-                            { iseyeVisible ?
-                            <Image
-                                source={icon.eye}
-                                style={styles.eye}
-                            />
-                            :
-                            <Image
-                                source={icon.hide}
-                                style={styles.eye}
-                            />
+                            {iseyeVisible ?
+                                <Image
+                                    source={icon.eye}
+                                    style={styles.eye}
+                                />
+                                :
+                                <Image
+                                    source={icon.hide}
+                                    style={styles.eye}
+                                />
                             }
                         </TouchableOpacity>
                     </View>
@@ -193,7 +204,7 @@ const Login = () => {
                                     style={styles.logo}
                                 />
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={openGit}>
                                 <Image
                                     source={icon.github}
                                     style={styles.logo}
@@ -212,6 +223,12 @@ const Login = () => {
                         msg="Invalid credentials!"
                         onBackdropPress={onBackdropPress}
                         onClose={toggleModal}
+                    />
+                    <AlertModal
+                        isModalVisible={isModalVisible1}
+                        msg="Fields can't be empty!"
+                        onBackdropPress={onBackdropPress1}
+                        onClose={toggleModal1}
                     />
                 </ScrollView>
             </KeyboardAvoidingView>

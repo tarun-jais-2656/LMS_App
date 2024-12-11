@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { icon } from "../../assets/icons";
 import AppIntroSlider from "react-native-app-intro-slider";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "./styles";
@@ -45,23 +45,37 @@ const Tutorial = () => {
     const navigation = useNavigation()
     const [tut, setTut] = useState('flase');
 
-    const onPress = async () => {
-        setTut('true')
-        await AsyncStorage.setItem('tut', tut);
-        navigation.navigate('Login')
+    const handleNav = () => {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+            })
+        );
     }
+
+    //try catch in await....done
+
+    const onPress = async () => {
+        try {
+            setTut('true')
+            await AsyncStorage.setItem('tut', tut);
+            handleNav();
+        }
+        catch (error) {
+            console.error('Error occurred:', error);
+        }
+    }
+
+    //inline functions.......done
 
     return (
         <SafeAreaView style={styles.container}>
             <AppIntroSlider
                 renderItem={renderItem}
                 data={data}
-                onDone={() => {
-                    navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
-                }}
-                onSkip={() => {
-                    navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
-                }}
+                onDone={handleNav}
+                onSkip={handleNav}
                 renderNextButton={() => (
                     <Text style={styles.btnTxt}>Next</Text>
                 )}

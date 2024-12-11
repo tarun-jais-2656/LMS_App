@@ -52,12 +52,9 @@ export default function VideoPlayer() {
   // };
 
   const handleNav = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'CoursePlaylist', params: { course } }]
-    });
+    navigation.pop();
+    navigation.navigate('CoursePlaylist', { course });
   };
-
   return (
     <View style={{ flex: 1 }}>
       <Header title="Video Player" onpress={handleNav} />
@@ -77,7 +74,7 @@ export default function VideoPlayer() {
               onEnd={() => setPaused(true)}
               fullscreen={fullScreen}
               onFullscreenPlayerWillPresent={() => setFullScreen(true)} // Listen for fullscreen event
-              onFullscreenPlayerWillDismiss={() => {setFullScreen(false); Orientation.lockToPortrait()}} // Handle fullscreen exit
+              onFullscreenPlayerWillDismiss={() => { setFullScreen(false); Orientation.lockToPortrait() }} // Handle fullscreen exit
             />
 
             {clicked && (
